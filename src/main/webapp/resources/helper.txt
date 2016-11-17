@@ -1,0 +1,7 @@
+#install nodejs
+https://nodejs.org/en/download/package-manager/
+#install lesp and compile
+http://stackoverflow.com/questions/24580583/compile-less-file-into-css-bootstrap-3
+
+
+lessc src/main/webapp/resources/less/main.less > src/main/webapp/resources/css/main.css
