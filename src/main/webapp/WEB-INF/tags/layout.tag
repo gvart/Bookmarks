@@ -16,10 +16,10 @@
     <div class="xd-container">
 
         <jsp:doBody/>
-
-        <bookmarks:bottomInfo/>
     </div>
 </div>
+<bookmarks:bottomInfo/>
+
 
 
 

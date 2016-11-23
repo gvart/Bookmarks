@@ -27,6 +27,22 @@
         .transp{
             opacity: 0.94;
         }
+
+        @keyframes anim {
+            0%   {border-color:transparent}
+            100% {border-color:red}
+        }
+
+        .signup{
+            border: 2px solid transparent;
+            padding:2px;
+            border-radius:40%;
+            animation-name: anim;
+            animation-duration: 1s;
+            animation-delay: 2s;
+            animation-iteration-count: infinite;
+
+        }
     </style>
 </head>
 <body onload='document.loginform.username.focus();'>
@@ -92,7 +108,7 @@
                         <div class="col-md-12 control">
                             <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
                                 Don't have an account!
-                                <a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
+                                <a  class="signup" href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
                                     Sign Up Here
                                 </a>
                             </div>

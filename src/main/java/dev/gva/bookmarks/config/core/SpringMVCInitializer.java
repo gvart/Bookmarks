@@ -66,6 +66,8 @@ public class SpringMVCInitializer extends AbstractAnnotationConfigDispatcherServ
         registration.addMapping("/dandelion-assets/*");
     }
 
-
-
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        registration.setInitParameter("throwExceptionIfNoHandlerFound","true");
+    }
 }

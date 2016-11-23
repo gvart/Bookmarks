@@ -17,7 +17,9 @@
                 <li><a href="#">Page 0</a></li>
                 <li><a href="#">Page 1</a></li>
                 <li><a href="#">Page 2</a></li>
-                <li><a href="#">Page 3</a></li>
+                <sec:authorize access="isAuthenticated()">
+                    <li><a href="/profile/<sec:authentication property="principal.username"/>">Profile</a></li>
+                </sec:authorize>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
