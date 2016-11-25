@@ -7,6 +7,7 @@ import dev.gva.bookmarks.service.AuthenticationService;
 import dev.gva.bookmarks.service.EventTypeService;
 import dev.gva.bookmarks.service.UserRoleService;
 import dev.gva.bookmarks.service.UserService;
+import dev.gva.bookmarks.utils.UserFilesManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -29,7 +31,8 @@ public class AdminController {
     private UserService userService;
     private UserRoleService userRoleService;
     private EventTypeService eventTypeService;
-
+    @Autowired
+    private UserFilesManager userFilesManager;
     @Autowired
     @Qualifier(value = "userService")
     public void setUserService(UserService userService) {
@@ -70,10 +73,11 @@ public class AdminController {
     }
 
     @RequestMapping(path = "/admin/users/deleteUser", method = RequestMethod.GET)
-    public String deleteUser(@RequestParam("id") int id,ModelMap modelMap){
+    public String deleteUser(@RequestParam("id") int id,ModelMap modelMap) throws IOException {
         User user = userService.getUserById(id);
         userRoleService.removeRoles(user.getUserRoles());
         userService.removeUser(id);
+        userFilesManager.deleteUserStore(user.getUsername());
         modelMap.addAttribute("user",user);
         return "info/showMessage";
     }

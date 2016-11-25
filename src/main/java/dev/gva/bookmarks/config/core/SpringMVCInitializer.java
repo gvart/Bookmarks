@@ -64,6 +64,7 @@ public class SpringMVCInitializer extends AbstractAnnotationConfigDispatcherServ
         ServletRegistration.Dynamic registration = servletContext.addServlet("dandelionServlet", dandelionServlet);
         registration.setLoadOnStartup(2);
         registration.addMapping("/dandelion-assets/*");
+        registration.setAsyncSupported(true);
     }
 
     @Override

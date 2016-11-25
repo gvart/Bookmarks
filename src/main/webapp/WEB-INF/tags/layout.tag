@@ -12,7 +12,7 @@
 </head>
 <body>
 <bookmarks:menu/>
-<div class="container-fluid">
+<div class="">
     <div class="xd-container">
 
         <jsp:doBody/>

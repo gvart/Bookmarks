@@ -5,6 +5,7 @@ import dev.gva.bookmarks.model.UserRole;
 import dev.gva.bookmarks.service.AuthenticationService;
 import dev.gva.bookmarks.service.UserRoleService;
 import dev.gva.bookmarks.service.UserService;
+import dev.gva.bookmarks.utils.UserFilesManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,17 +35,16 @@ import java.util.Date;
  * Created by pika on 10/17/16.
  */
 @Controller
-@PropertySource(value = {"classpath:config.properties"})
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
-    private Environment environment;
     private UserService userService;
     private UserRoleService userRoleService;
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private UserFilesManager userFilesManager;
 
     @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
     public String registerUser(@Valid @ModelAttribute("user") User u, BindingResult result, ModelMap modelMap,HttpServletRequest request) throws InterruptedException, IOException {
@@ -60,12 +60,12 @@ public class UserController {
             userService.addUser(u);
             userRoleService.addRole(new UserRole(u,"ROLE_USER"));
 
-            createUserStore(u.getUsername());
+            userFilesManager.createUserStore(u.getUsername());
 
             if(authenticationService.autoLogin(u.getUsername(),tempPswd)) {
                 logger.debug("Succeed to auth user: " + u.getUsername());
                 request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,SecurityContextHolder.getContext());
-                return "redirect:/";
+                return "redirect:/profile/" + u.getUsername();
             }
             logger.error("Failed to auth user: " + u);
             return "exception";
@@ -80,26 +80,8 @@ public class UserController {
         }
     }
 
-    private void createUserStore(String username) throws IOException {
-        String rootPath = environment.getRequiredProperty("userFilePath");
 
-        final String userImages  = rootPath + "/" + username + "/images";
-        final String userVideos  = rootPath + "/" + username + "/videos";
-        final String userAnother = rootPath + "/" + username + "/another";
-
-        File f = new File(rootPath + "/" + username);
-        if(f.mkdir()){
-            logger.debug("Directory created for user:" + username);
-                new File(userImages).mkdir();
-                new File(userVideos).mkdir();
-                new File(userAnother).mkdir();
-
-            logger.debug("Finished to create directories for " + userAnother);
-        }
-    }
-
-
-    @RequestMapping(value = "profile/{username}")
+    @RequestMapping(value = "/profile/{username}")
     public String userProfile(@PathVariable(value = "username") String username, ModelMap modelMap,HttpServletRequest request){
             User user = userService.getUserByUsername(username);
             if(user == null){
@@ -122,9 +104,14 @@ public class UserController {
                         master = true;
                     }
                 }
-
+                //check if this is main profile
                 modelMap.addAttribute("master", master);
 
+                //check for background and profile images
+                modelMap.addAttribute("wallImage", userFilesManager.getWallPhoto(username));
+                modelMap.addAttribute("profileImage", userFilesManager.getProfilePhoto(username));
+                modelMap.addAttribute("fullName", user.getFirstName() + " " + user.getLastName());
+                modelMap.addAttribute("quote", user.getQuote());
                 return "user/profile";
             }
     }

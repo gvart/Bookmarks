@@ -1,5 +1,6 @@
 package dev.gva.bookmarks.config;
 
+import dev.gva.bookmarks.utils.UserFilesManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import java.io.File;
 
 
 /**
@@ -32,7 +34,6 @@ import org.springframework.web.servlet.view.JstlView;
  */
 @EnableWebMvc
 @Configuration
-
 @ComponentScan(basePackages = "dev.gva.bookmarks")
 @PropertySource(value = {"classpath:config.properties"})
 public class AppConfig extends WebMvcConfigurerAdapter {
@@ -89,6 +90,11 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");
         return localeChangeInterceptor;
+    }
+
+    @Bean
+    public UserFilesManager userFilesManager(){
+        return new UserFilesManager();
     }
 
     @Override

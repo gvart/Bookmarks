@@ -57,6 +57,8 @@ public class User {
     @Column(name = "createdate", nullable = false)
     private Date createDate;
 
+    @Column(name = "quote")
+    private String quote;
 
     public User(){}
 
@@ -150,6 +152,13 @@ public class User {
         }
         return result.substring(0,result.length()-2);
     }
+    public String getQuote() {
+        return quote;
+    }
+
+    public void setQuote(String quote) {
+        this.quote = quote;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -166,7 +175,8 @@ public class User {
         if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
         if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
         if (userRoles != null ? !userRoles.equals(user.userRoles) : user.userRoles != null) return false;
-        return createDate != null ? createDate.equals(user.createDate) : user.createDate == null;
+        if (createDate != null ? !createDate.equals(user.createDate) : user.createDate != null) return false;
+        return quote != null ? quote.equals(user.quote) : user.quote == null;
 
     }
 
@@ -181,6 +191,7 @@ public class User {
         result = 31 * result + (enabled ? 1 : 0);
         result = 31 * result + (userRoles != null ? userRoles.hashCode() : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+        result = 31 * result + (quote != null ? quote.hashCode() : 0);
         return result;
     }
 
@@ -189,13 +200,15 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", enabled=" + enabled +
                 ", userRoles=" + userRoles +
                 ", createDate=" + createDate +
+                ", quote='" + quote + '\'' +
                 '}';
     }
+
+
 }
