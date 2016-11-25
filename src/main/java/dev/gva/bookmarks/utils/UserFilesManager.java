@@ -4,8 +4,12 @@ import dev.gva.bookmarks.web.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,11 +59,16 @@ public class UserFilesManager {
     public String getProfilePhoto(String username){
         initRootPath();
         File photo = new File(rootPath + "/" + username + "/profile/");
-        if(photo.exists())
+        if(photo.exists()){
+            logger.debug("Found user[" + username + "] profile folder");
             for (String s : photo.list()) {
                 if(s.contains("profileImage")){
-                    return rootPath + "/" + username + "/profile/" + s;
+                    return "/userResources/" + username + "/profile/" + s;
                 }
+            }
+        }else{
+            logger.debug(photo.getAbsolutePath());
+            logger.debug("Can't found user[" + username + "] profile folder");
         }
         return DEFAULT_PROFILE_PHOTO_PATH;
     }
@@ -67,12 +76,17 @@ public class UserFilesManager {
     public String getWallPhoto(String username){
         initRootPath();
         File photo = new File(rootPath + "/" + username + "/profile/");
-        if(photo.exists())
+        if(photo.exists()) {
+            logger.debug("Found user[" + username + "] profile folder");
             for (String s : photo.list()) {
-                if(s.contains("wallImage")){
-                    return rootPath + "/" + username + "/profile/" + s;
+                if (s.contains("wallImage")) {
+                    return  "/userResources/" + username + "/profile/" + s;
                 }
             }
+        }else {
+            logger.debug(photo.getAbsolutePath());
+            logger.debug("Can't found user[" + username + "] profile folder");
+        }
         return DEFAULT_WALL_PHOTO_PATH;
     }
 

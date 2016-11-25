@@ -9,7 +9,8 @@ CREATE TABLE users
   firstname character varying(50),
   lastname character varying(50),
   createdate date,
-  enabled boolean DEFAULT true
+  enabled boolean DEFAULT true,
+  quote CHARACTER VARYING(100) DEFAULT ''
 );
 
 CREATE TABLE user_roles

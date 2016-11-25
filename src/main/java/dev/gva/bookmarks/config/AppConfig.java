@@ -4,6 +4,7 @@ import dev.gva.bookmarks.utils.UserFilesManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -62,7 +63,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resource/**").addResourceLocations("/resources/");
         registry.addResourceHandler("/vendors/**").addResourceLocations("/vendors/");
-        registry.addResourceHandler("/userResources/**").addResourceLocations(environment.getRequiredProperty("userFilePath"));
+        registry.addResourceHandler("/userResources/**").addResourceLocations("/userResources/");
     }
 
     //Required when both servlet-mapping is '/' and static resources need to be served

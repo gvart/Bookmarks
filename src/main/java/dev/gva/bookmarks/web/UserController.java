@@ -1,5 +1,6 @@
 package dev.gva.bookmarks.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.gva.bookmarks.model.User;
 import dev.gva.bookmarks.model.UserRole;
 import dev.gva.bookmarks.service.AuthenticationService;
@@ -24,12 +25,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Created by pika on 10/17/16.
