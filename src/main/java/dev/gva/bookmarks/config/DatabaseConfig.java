@@ -1,12 +1,16 @@
 package dev.gva.bookmarks.config;
 
+import dev.gva.bookmarks.DAO.DAOImpl.EventDAOImpl;
 import dev.gva.bookmarks.DAO.DAOImpl.EventTypeDAOImpl;
 import dev.gva.bookmarks.DAO.DAOImpl.UserDAOImpl;
 import dev.gva.bookmarks.DAO.DAOImpl.UserRoleDAOImpl;
+import dev.gva.bookmarks.DAO.EventDAO;
 import dev.gva.bookmarks.DAO.EventTypeDAO;
 import dev.gva.bookmarks.DAO.UserDAO;
 import dev.gva.bookmarks.DAO.UserRoleDAO;
+import dev.gva.bookmarks.service.EventService;
 import dev.gva.bookmarks.service.EventTypeService;
+import dev.gva.bookmarks.service.ServiceImpl.EventServiceImpl;
 import dev.gva.bookmarks.service.ServiceImpl.EventTypeServiceImpl;
 import dev.gva.bookmarks.service.ServiceImpl.UserRoleServiceImpl;
 import dev.gva.bookmarks.service.ServiceImpl.UserServiceImpl;
@@ -121,5 +125,19 @@ public class DatabaseConfig {
         EventTypeServiceImpl eventTypeService = new EventTypeServiceImpl();
         eventTypeService.setEventTypeDAO(eventTypeDAO());
         return eventTypeService;
+    }
+
+    @Bean
+    public EventDAO eventDAO(){
+        EventDAOImpl eventDAO = new EventDAOImpl();
+        eventDAO.setSessionFactory(sessionFactory());
+        return eventDAO;
+    }
+
+    @Bean
+    public EventService eventService(){
+        EventServiceImpl eventService = new EventServiceImpl();
+        eventService.setEventDAO(eventDAO());
+        return eventService;
     }
 }

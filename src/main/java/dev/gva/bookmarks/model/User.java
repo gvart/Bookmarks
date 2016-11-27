@@ -52,6 +52,9 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<UserRole> userRoles = new HashSet<UserRole>(0);
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Event> userEvents = new HashSet<Event>(0);
+
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "createdate", nullable = false)
@@ -71,6 +74,14 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public Set<Event> getUserEvents() {
+        return userEvents;
+    }
+
+    public void setUserEvents(Set<Event> userEvents) {
+        this.userEvents = userEvents;
     }
 
     public int getId() {
@@ -145,13 +156,6 @@ public class User {
         this.createDate = createDate;
     }
 
-    public String listRoles(){
-        String result = "";
-        for (UserRole userRole : userRoles) {
-            result+=userRole + ", ";
-        }
-        return result.substring(0,result.length()-2);
-    }
     public String getQuote() {
         return quote;
     }

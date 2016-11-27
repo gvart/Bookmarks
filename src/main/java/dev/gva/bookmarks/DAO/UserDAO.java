@@ -16,7 +16,7 @@ public interface UserDAO {
     public List<User> listUsers();
     public User getUserById(Integer id);
     public User getUserByUsername(String username);
-    public void removeUser(int id);
+    public void deleteUser(int id);
     public boolean userExists(String username);
 
 }

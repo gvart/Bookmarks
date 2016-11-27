@@ -76,7 +76,7 @@ public class AdminController {
     public String deleteUser(@RequestParam("id") int id,ModelMap modelMap) throws IOException {
         User user = userService.getUserById(id);
         userRoleService.removeRoles(user.getUserRoles());
-        userService.removeUser(id);
+        userService.deleteUser(id);
         userFilesManager.deleteUserStore(user.getUsername());
         modelMap.addAttribute("user",user);
         return "info/showMessage";

@@ -70,7 +70,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void removeUser(int id) {
+    public void deleteUser(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         User u = (User) session.load(User.class, new Integer(id));
         if(null != u) {

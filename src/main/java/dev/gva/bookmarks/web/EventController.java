@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class EventController {
 
     @RequestMapping(path = "/event/create", method = RequestMethod.GET)
-    public String create(ModelMap modelMap){
+    public String init(ModelMap modelMap){
 
         ArrayList<String> privateArr = new ArrayList();
         privateArr.add("Yes");

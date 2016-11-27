@@ -4,6 +4,7 @@ import dev.gva.bookmarks.DAO.EventTypeDAO;
 import dev.gva.bookmarks.model.EventType;
 import dev.gva.bookmarks.service.EventTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Created by pika on 11/11/16.
  */
+@Service
 public class EventTypeServiceImpl implements EventTypeService {
 
     @Autowired
