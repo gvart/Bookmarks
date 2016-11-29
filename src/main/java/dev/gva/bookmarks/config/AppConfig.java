@@ -4,6 +4,7 @@ import dev.gva.bookmarks.utils.UserFilesManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.context.MessageSource;
@@ -39,8 +40,6 @@ import java.io.File;
 @PropertySource(value = {"classpath:config.properties"})
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-    @Autowired
-    private Environment environment;
 
     @Bean
     public ViewResolver viewResolver(){
@@ -101,5 +100,12 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(localeChangeInterceptor());
+    }
+
+    @Bean
+    public MultipartResolver multipartResolver(){
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxInMemorySize(20480); //20MB
+        return multipartResolver;
     }
 }

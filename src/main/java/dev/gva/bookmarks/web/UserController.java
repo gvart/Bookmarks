@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -98,19 +100,15 @@ public class UserController {
                 logger.debug("Found user " + username + ".");
 
                 boolean master = false;
-                Object principals =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                String tempUsername = getLoggedInUser();
+                logger.debug(tempUsername + " access " + username + " profile page.");
 
-                logger.debug(principals.toString() + " access " + username + " profile page.");
-
-                if(!principals.toString().equals("anonymousUser")){
-                    org.springframework.security.core.userdetails.User u =
-                            (org.springframework.security.core.userdetails.User)
-                                    principals;
-
-                    if (username.equals(u.getUsername())) {
+                if(!tempUsername.equals("anonymousUser")){
+                    if (username.equals(tempUsername)) {
                         master = true;
                     }
                 }
+
                 //check if this is main profile
                 modelMap.addAttribute("master", master);
 
@@ -123,6 +121,57 @@ public class UserController {
             }
     }
 
+    @RequestMapping(value = "/user/setProfilePhoto", method = RequestMethod.POST)
+    public @ResponseBody String uploadProfilePhoto(@RequestParam("media") MultipartFile file) throws Exception {
+        String user = getLoggedInUser();
+
+        logger.debug("Start update profile photo for user:" + user);
+
+        File dir = userFilesManager.getUserProfileDir(getLoggedInUser());
+        userFilesManager.deleteUserProfilePhoto(user);
+
+        // Create the file on server
+        File serverFile = new File(dir.getAbsolutePath() + "/profileImage.png");
+        BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+        ImageIO.write(bufferedImage,"png",serverFile);
+        bufferedImage.flush();
+        return file.getSize() + " bytes";
+    }
+
+
+    @RequestMapping(value = "/user/setWallPhoto", method = RequestMethod.POST)
+    public @ResponseBody String uploadWallPhoto(@RequestParam("media") MultipartFile file) throws Exception {
+        String user = getLoggedInUser();
+
+        logger.debug("Start update wall photo for user:" + user);
+
+        File dir = userFilesManager.getUserProfileDir(getLoggedInUser());
+        userFilesManager.deleteUserWallPhoto(user);
+
+        // Create the file on server
+        File serverFile = new File(dir.getAbsolutePath() + "/wallImage.png");
+
+        BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+        ImageIO.write(bufferedImage,"png",serverFile);
+        bufferedImage.flush();
+        return file.getSize() + " bytes";
+    }
+
+
+    public String getLoggedInUser(){
+        Object principals =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(!principals.toString().equals("anonymousUser")){
+            org.springframework.security.core.userdetails.User u =
+                    (org.springframework.security.core.userdetails.User)
+                            principals;
+
+            return u.getUsername();
+
+        }else {
+            return "anonymousUser";
+        }
+    }
 
     @Autowired
     @Qualifier(value = "userService")

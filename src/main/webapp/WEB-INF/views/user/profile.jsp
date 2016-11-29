@@ -7,21 +7,6 @@
 
 <bookmarks:layout pageName="User profile">
 
-    <div class="col-lg-12">
-       <c:if test="${master}">
-           <h3>It's your profile</h3>
-       </c:if>
-            <div class="fb-profile">
-
-                <img align="left" class="fb-image-lg" src="${wallImage}" alt="Profile wall image"/>
-                <img align="left" class="fb-image-profile thumbnail" src="${profileImage}" alt="Profile face image"/>
-                <div class="fb-profile-text">
-                    <h2 class="profile-font">${fullName}   <c:if test="${master}"><span data-toggle="modal" data-target="#configWindows" id="settings-icon" class="glyphicon glyphicon-cog" style=" font-size:25px; color: #1b6d85;"></span></c:if></h2>
-                    <p class="quote-font">${quote}</p>
-                </div>
-            </div>
-        </div>
-
     <c:if test="${master}">
         <!-- Modal -->
         <div id="configWindows" class="modal fade" role="dialog">
@@ -33,14 +18,66 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title"><span class="glyphicon glyphicon-wrench"></span>Configure your profile</h4>
                     </div>
-                    <div class="modal-body">
-                      <form target="">
-                          <div class=""></div>
-                          <label>Wall image</label>
-                          <input id="profileImageLoader" type="file">
-                          <input id="profileImageSubmit" type="button" value="Update" class="btn btn-default">
-                      </form>
+                    <div class="modal-body row">
+                        <div class="col-md-3 profileUploadBox">
+                            <p style="text-align: center;">Profile image</p>
+                                <label for="profileImageFileLoader">
+                                    <img src="/resources/images/users.png">
+                                </label>
+                                <input type="file" name="file" id="profileImageFileLoader"/>
+                        </div>
+                        <div class="col-md-3 profileUploadBox">
+                            <p style="text-align: center;">Wall image</p>
+                            <label for="wallImageFileLoader">
+                                <img src="/resources/images/wall.png">
+                            </label>
+                            <input type="file" name="file" id="wallImageFileLoader"/>
+                        </div>
+                        <div class="col-md-3 profileUploadBox">
+                        </div>
+                        <div class="col-md-3 profileUploadBox">
+                        </div>
+                        <script type="text/javascript">
+                                var files = [];
+                                $(document)
+                                        .on(
+                                                "change",
+                                                "#profileImageFileLoader",
+                                                function(event) {
+                                                    files=event.target.files;
+                                                    processUpload("/user/setProfilePhoto");
+                                                });
+                                $(document)
+                                        .on(
+                                                "change",
+                                                "#wallImageFileLoader",
+                                                function(event) {
+                                                    files=event.target.files;
+                                                    processUpload("/user/setWallPhoto");
+                                                });
+
+                                function processUpload(destination)
+                                {
+                                    var oMyForm = new FormData();
+                                    oMyForm.append("media", files[0]);
+
+                                    $.ajax({
+                                        dataType : 'json',
+                                        url : destination,
+                                        data : oMyForm,
+                                        type : "POST",
+                                        enctype: 'multipart/form-data',
+                                        processData: false,
+                                        contentType:false,
+                                        success : function(result) {
+                                        },
+                                        error : function(result){
+                                        }
+                                    });
+                                }
+                            </script>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
@@ -49,42 +86,29 @@
             </div>
         </div>
 
-        <script>
-            var files = [];
-            $(document)
-                    .on(
-                            "change",
-                            "#profileImageLoader",
-                            function (event) {
-                                files = event.target.files;
-                            });
-            $(document)
-                    .on(
-                            "click",
-                            "#profileImageSubmit",
-                            function () {
-                                processUpload();
-                            });
-            function processUpload() {
-                var form = new FormData();
-                form.append("file",files[0]);
-                $.ajax({dataType : 'json',
-                        url :"/user/configure",
-                        data: form,
-                        type: "POST",
-                        enctype: 'multipart/form-data',
-                        processData: false,
-                        contentType: false,
-                        success: function(result){
-                            alert("Success: " + result);
-                        },
-                        error: function (result) {
-                            alert("Failed: " + result.toString());
-                        }
-                });
-            }
-        </script>
+
     </c:if>
+    <div class="col-lg-12">
+       <c:if test="${master}">
+           <h3>It's your profile</h3>
+       </c:if>
+            <div class="fb-profile">
+
+                <img align="left" class="fb-image-lg" src="${wallImage}" alt="Profile wall image"/>
+                <img align="left" class="fb-image-profile thumbnail" src="${profileImage}" alt="Profile face image"/>
+                <div class="fb-profile-text">
+                    <h2 class="profile-font">${fullName}  <c:if test="${master}"><span data-toggle="modal" data-target="#configWindows" id="settings-icon" class="glyphicon glyphicon-cog" style=" font-size:25px; color: #1b6d85;"></span></c:if></h2>
+                    <p class="quote-font">${quote}</p>
+                </div>
+            </div>
+        </div>
+   <%-- <form method="POST" enctype="multipart/form-data" action="/upload">
+        <table>
+            <tr><td>File to upload:</td><td><input type="file" name="media" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+        </table>
+    </form>--%>
+
 
 
 

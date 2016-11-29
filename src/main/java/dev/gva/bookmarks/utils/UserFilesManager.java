@@ -17,7 +17,6 @@ import java.io.IOException;
 /**
  * Created by pika on 11/25/16.
  */
-@PropertySource(value = {"classpath:config.properties"})
 public class UserFilesManager {
 
     private static final Logger logger = LoggerFactory.getLogger(UserFilesManager.class);
@@ -96,4 +95,40 @@ public class UserFilesManager {
         }
     }
 
+    public File  getUserProfileDir(String username){
+        initRootPath();
+        return new File(rootPath + "/" + username + "/profile");
+    }
+
+
+    public String getExtension(String fileName) throws Exception {
+        String f[] = fileName.split("\\.");
+
+        logger.debug("After file split, Size: " + f.length);
+
+        if(f.length == 2){
+            return f[1];
+        }else if (f.length > 2){
+            return  f[f.length-1];
+        }else {
+            logger.debug("Can't found extension for '" + fileName + "'");
+            throw new Exception("Can't found extension for '" + fileName + "'");
+        }
+    }
+
+    public void deleteUserProfilePhoto(String username){
+        String profilePhoto = getProfilePhoto(username);
+        if(!profilePhoto.equals(DEFAULT_PROFILE_PHOTO_PATH)){
+            new File(profilePhoto).delete();
+        }
+        logger.debug("Profile photo for user " + username +  " is deleted.");
+    }
+
+    public void deleteUserWallPhoto(String username){
+        String wallPhoto = getWallPhoto(username);
+        if(!wallPhoto.equals(DEFAULT_WALL_PHOTO_PATH)){
+            new File(DEFAULT_PROFILE_PHOTO_PATH).delete();
+        }
+        logger.debug("Profile photo for user " + username +  " is deleted.");
+    }
 }
