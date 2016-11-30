@@ -7,12 +7,13 @@
 <%@ taglib prefix="datatables" uri="http://github.com/dandelion/datatables" %>
 
 <bookmarks:layout pageName="Event types">
-    <div style="display:inline;">
+    <div class="col-md-7">
         <form:form modelAttribute="eventType" method="POST" action="/admin/eventtype/add" commandName="eventType">
             <form:label path="name" cssClass="">Name:</form:label>
             <form:input path="name" cssClass="form-control" />
             <input class="btn btn-primary" style="width: 100%;" type="submit" value="Submit"/>
         </form:form>
+
     </div>
 
     <datatables:table id="eventTypes" data="${allEventTypes}" row="eventType" cssClass="table table-stiped"
@@ -28,4 +29,9 @@
             </datatables:column>
         </datatables:table>
 
+    <c:if test='${param.containsKey("error")}'>
+        <script>
+            alert("Warning!  ${param.get("error").toString()}");
+        </script>
+    </c:if>
 </bookmarks:layout>

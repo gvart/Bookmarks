@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * Created by pika on 11/11/16.
  */
+
 public class EventTypeDAOImpl implements EventTypeDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
@@ -55,10 +56,19 @@ public class EventTypeDAOImpl implements EventTypeDAO {
     }
 
     @Override
+    public EventType findEventTypeByName(String name) {
+        Session session = this.sessionFactory.getCurrentSession();
+        EventType et = (EventType) session.createQuery("from EventType where name=:name").setParameter("name",name).uniqueResult();
+        logger.info("Event type loaded successfully, EventType details=" + et);
+
+        return et;
+    }
+
+    @Override
     public EventType findEventTypeById(Integer id) {
         Session session = this.sessionFactory.getCurrentSession();
         EventType et = (EventType) session.load(EventType.class, new Integer(id));
-        logger.info("User loaded Successfully, EventType details=" + et);
+        logger.info("Event type loaded successfully, EventType details=" + et);
         return et;
     }
 }

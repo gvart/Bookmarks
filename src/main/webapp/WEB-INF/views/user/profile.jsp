@@ -38,6 +38,7 @@
                         <div class="col-md-3 profileUploadBox">
                         </div>
                         <script type="text/javascript">
+                                var changed = false;
                                 var files = [];
                                 $(document)
                                         .on(
@@ -46,6 +47,7 @@
                                                 function(event) {
                                                     files=event.target.files;
                                                     processUpload("/user/setProfilePhoto");
+                                                    changed = true;
                                                 });
                                 $(document)
                                         .on(
@@ -54,6 +56,7 @@
                                                 function(event) {
                                                     files=event.target.files;
                                                     processUpload("/user/setWallPhoto");
+                                                    changed = true;
                                                 });
 
                                 function processUpload(destination)
@@ -69,17 +72,23 @@
                                         enctype: 'multipart/form-data',
                                         processData: false,
                                         contentType:false,
-                                        success : function(result) {
+                                        success : function() {
                                         },
-                                        error : function(result){
+                                        error : function(){
                                         }
                                     });
                                 }
+
+                            function doRefresh() {
+                                if(changed){
+                                    location.refresh();
+                                }
+                            }
                             </script>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="doRefresh()">Close</button>
                     </div>
                 </div>
 
@@ -94,8 +103,8 @@
        </c:if>
             <div class="fb-profile">
 
-                <img align="left" class="fb-image-lg" src="${wallImage}" alt="Profile wall image"/>
-                <img align="left" class="fb-image-profile thumbnail" src="${profileImage}" alt="Profile face image"/>
+                <img id="profWallImg" align="left" class="fb-image-lg" src="${wallImage}" alt="Profile wall image"/>
+                <img id="profFaceImg" align="left" class="fb-image-profile thumbnail" src="${profileImage}" alt="Profile face image"/>
                 <div class="fb-profile-text">
                     <h2 class="profile-font">${fullName}  <c:if test="${master}"><span data-toggle="modal" data-target="#configWindows" id="settings-icon" class="glyphicon glyphicon-cog" style=" font-size:25px; color: #1b6d85;"></span></c:if></h2>
                     <p class="quote-font">${quote}</p>

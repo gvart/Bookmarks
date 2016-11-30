@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Set;
@@ -16,6 +17,7 @@ import java.util.Set;
 /**
  * Created by pika on 27.11.2016.
  */
+@Repository
 public class EventDAOImpl implements EventDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(EventDAOImpl.class);

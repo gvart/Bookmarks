@@ -7,12 +7,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 
 /**
  * Created by pika on 11/10/16.
  */
+@Repository
 public class UserRoleDAOImpl implements UserRoleDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);

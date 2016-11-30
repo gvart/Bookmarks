@@ -10,9 +10,12 @@ import java.util.Set;
  * Created by pika on 11/11/16.
  */
 public interface EventTypeDAO {
-    public void addEventType(EventType eventType);
-    public void updateEventType (EventType eventType);
-    public void deleteEventType(EventType eventType);
-    public EventType findEventTypeById(Integer id);
-    public List<EventType> listEventTypes();
+
+    void addEventType(EventType eventType);
+    void updateEventType (EventType eventType);
+    void deleteEventType(EventType eventType);
+    EventType findEventTypeById(Integer id);
+    List<EventType> listEventTypes();
+    EventType findEventTypeByName(String name);
+
 }

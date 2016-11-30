@@ -3,24 +3,22 @@ package dev.gva.bookmarks.web;
 import dev.gva.bookmarks.model.EventType;
 import dev.gva.bookmarks.model.User;
 import dev.gva.bookmarks.model.UserRole;
-import dev.gva.bookmarks.service.AuthenticationService;
-import dev.gva.bookmarks.service.EventTypeService;
-import dev.gva.bookmarks.service.UserRoleService;
-import dev.gva.bookmarks.service.UserService;
+import dev.gva.bookmarks.service.*;
 import dev.gva.bookmarks.utils.UserFilesManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by pika on 11/11/16.
@@ -28,26 +26,36 @@ import java.util.Date;
 @Controller
 public class AdminController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+
     private UserService userService;
     private UserRoleService userRoleService;
     private EventTypeService eventTypeService;
-    @Autowired
     private UserFilesManager userFilesManager;
+    private EmailService emailService;
+
+
     @Autowired
-    @Qualifier(value = "userService")
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+    @Autowired
+    public void setUserFilesManager(UserFilesManager userFilesManager) {
+        this.userFilesManager = userFilesManager;
+    }
+
+    @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
-
     @Autowired
-    @Qualifier(value = "userRoleService")
     public void setUserRoleService(UserRoleService userRoleService) {
         this.userRoleService = userRoleService;
     }
 
     @Autowired
-    @Qualifier(value = "eventTypeService")
     public void setEventTypeService(EventTypeService eventTypeService) {
         this.eventTypeService = eventTypeService;
     }
@@ -96,6 +104,7 @@ public class AdminController {
 
     @RequestMapping(path = "/admin/eventtype/listEventTypes", method = RequestMethod.GET)
     public String listEventTypes(ModelMap modelMap){
+        logger.debug("INPARAM##########:" + modelMap.get("error"));
         modelMap.addAttribute("allEventTypes", eventTypeService.listEventTypes());
         modelMap.addAttribute("eventType", new EventType());
         return "admin/event/listEventTypes";
@@ -103,11 +112,11 @@ public class AdminController {
 
     @RequestMapping(path = "/admin/eventtype/add", method = RequestMethod.POST)
     public String addEventType(@Valid @ModelAttribute("eventtype") EventType et, BindingResult result, ModelMap modelMap){
-
-        if(!result.hasErrors()) {
-            eventTypeService.addEventType(et);
+        if (result.hasErrors() || eventTypeService.findEventTypeByName(et.getName()) != null){
+            //result.getAllErrors().get(0).getDefaultMessage()
+            modelMap.addAttribute("error", "Inserted value is not valid.");
         }else {
-                modelMap.addAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
+            eventTypeService.addEventType(et);
         }
         return "redirect:/admin/eventtype/listEventTypes";
     }
@@ -116,11 +125,29 @@ public class AdminController {
     public String deleteEventType(@RequestParam("id") int id, ModelMap modelMap){
         EventType eventType = eventTypeService.findEventTypeById(id);
         eventTypeService.deleteEventType(eventType);
-        return "admin/event/listEventTypes";
+        return "redirect:/admin/eventtype/listEventTypes";
     }
 
     @RequestMapping(path = "/admin", method = RequestMethod.GET)
     public String adminControlPanel(){
         return "admin/main";
     }
+
+    //MAIL
+
+   /* @RequestMapping(value = "/email/send", method = RequestMethod.GET)
+    public @ResponseBody String sendMail(){
+        logger.debug("Start send mail.");
+        Map<String, Object> model = new HashMap();
+        model.put(EmailService.FROM,"bookmarks.software@gmail.com");
+        model.put(EmailService.SUBJECT,"testmail");
+        model.put(EmailService.TO,new String[]{"gladis_vlad@yahoo.com","sho00t@bk.ru"});
+        model.put("title","Welcome in our community");
+        model.put("message1","test123213213");
+        model.put("message2 ","hello world");
+        boolean result = emailService.sendMail("single-column.vm",model);
+
+        return "Your message sent status: " + result;
+    }*/
+
 }

@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface UserService {
 
-    public void addUser(User u);
-    public void updateUser(User u);
-    public List<User> listUsers();
-    public User getUserById(Integer id);
-    public User getUserByUsername(String username);
-    public void deleteUser(int id);
-    public boolean userExists(String username);
+    void addUser(User u);
+    void updateUser(User u);
+    List<User> listUsers();
+    User getUserById(Integer id);
+    User getUserByUsername(String username);
+    void deleteUser(int id);
+    boolean userExists(String username);
 }
