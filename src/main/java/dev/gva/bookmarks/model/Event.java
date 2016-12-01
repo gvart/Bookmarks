@@ -33,8 +33,8 @@ public class Event {
     @Column(name = "lat")
     private float lat;
 
-    @Column(name = "lang")
-    private float lang;
+    @Column(name = "lng")
+    private float lng;
 
     @Column(name = "private")
     private boolean priv;
@@ -44,7 +44,11 @@ public class Event {
     @Column(name = "date", nullable = false)
     private Date date;
 
-    //private Set<EventType> eventTypes;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "event_eventtypes" ,
+            joinColumns = @JoinColumn(name = "event_id"),
+    inverseJoinColumns = @JoinColumn(name = "event_type_id"))
+    private Set<EventType> eventTypes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -91,12 +95,12 @@ public class Event {
         this.lat = lat;
     }
 
-    public float getLang() {
-        return lang;
+    public float getLng() {
+        return lng;
     }
 
-    public void setLang(float lang) {
-        this.lang = lang;
+    public void setLng(float lng) {
+        this.lng = lng;
     }
 
     public boolean isPriv() {
@@ -133,7 +137,7 @@ public class Event {
         if (id != event.id) return false;
         if (age != event.age) return false;
         if (Float.compare(event.lat, lat) != 0) return false;
-        if (Float.compare(event.lang, lang) != 0) return false;
+        if (Float.compare(event.lng, lng) != 0) return false;
         if (priv != event.priv) return false;
         if (name != null ? !name.equals(event.name) : event.name != null) return false;
         if (description != null ? !description.equals(event.description) : event.description != null) return false;
@@ -149,10 +153,18 @@ public class Event {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + age;
         result = 31 * result + (lat != +0.0f ? Float.floatToIntBits(lat) : 0);
-        result = 31 * result + (lang != +0.0f ? Float.floatToIntBits(lang) : 0);
+        result = 31 * result + (lng != +0.0f ? Float.floatToIntBits(lng) : 0);
         result = 31 * result + (priv ? 1 : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
+    }
+
+    public Set<EventType> getEventTypes() {
+        return eventTypes;
+    }
+
+    public void setEventTypes(Set<EventType> eventTypes) {
+        this.eventTypes = eventTypes;
     }
 }

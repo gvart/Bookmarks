@@ -83,4 +83,19 @@ public class AuthenticationService implements UserDetailsService {
 
         return false;
     }
+
+    public static String getLoggedInUser(){
+        Object principals =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(!principals.toString().equals("anonymousUser")){
+            org.springframework.security.core.userdetails.User u =
+                    (org.springframework.security.core.userdetails.User)
+                            principals;
+
+            return u.getUsername();
+
+        }else {
+            return "anonymousUser";
+        }
+    }
 }

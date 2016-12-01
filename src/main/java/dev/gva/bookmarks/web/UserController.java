@@ -106,7 +106,7 @@ public class UserController {
                 logger.debug("Found user " + username + ".");
 
                 boolean master = false;
-                String tempUsername = getLoggedInUser();
+                String tempUsername = AuthenticationService.getLoggedInUser();
                 logger.debug(tempUsername + " access " + username + " profile page.");
 
                 if(!tempUsername.equals("anonymousUser")){
@@ -133,20 +133,19 @@ public class UserController {
      * @throws IOException
      */
     @RequestMapping(value = "/user/setProfilePhoto", method = RequestMethod.POST)
-    public @ResponseBody String uploadProfilePhoto(@RequestParam("media") MultipartFile file) throws IOException {
-        String user = getLoggedInUser();
+    public void uploadProfilePhoto(@RequestParam("media") MultipartFile file) throws IOException {
+        String user = AuthenticationService.getLoggedInUser();
 
         logger.debug("Start update profile photo for user:" + user);
 
-        File dir = userFilesManager.getUserProfileDir(getLoggedInUser());
+        File dir = userFilesManager.getUserProfileDir(AuthenticationService.getLoggedInUser());
         userFilesManager.deleteUserProfilePhoto(user);
 
         // Create the file on server
-        File serverFile = new File(dir.getAbsolutePath() + "/profileImage.png");
+        File serverFile = new File(dir.getAbsolutePath() + File.separator + "profileImage.png");
         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
         ImageIO.write(bufferedImage,"png",serverFile);
         bufferedImage.flush();
-        return file.getSize() + " bytes";
     }
 
     /**
@@ -155,40 +154,28 @@ public class UserController {
      * @throws IOException
      */
     @RequestMapping(value = "/user/setWallPhoto", method = RequestMethod.POST)
-    public @ResponseBody void uploadWallPhoto(@RequestParam("media") MultipartFile file) throws IOException {
-        String user = getLoggedInUser();
+    public void uploadWallPhoto(@RequestParam("media") MultipartFile file) throws IOException {
+        String user = AuthenticationService.getLoggedInUser();
 
         logger.debug("Start update wall photo for user:" + user);
 
-        File dir = userFilesManager.getUserProfileDir(getLoggedInUser());
+        File dir = userFilesManager.getUserProfileDir(AuthenticationService.getLoggedInUser());
         userFilesManager.deleteUserWallPhoto(user);
 
         // Create the file on server
-        File serverFile = new File(dir.getAbsolutePath() + "/wallImage.png");
+        File serverFile = new File(dir.getAbsolutePath() + File.separator + "wallImage.png");
 
         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
         ImageIO.write(bufferedImage,"png",serverFile);
         bufferedImage.flush();
     }
 
+
     /**
      *
      * @return username from session , in case when user in not authenticated return will be 'anonymousUser'
      */
-    private String getLoggedInUser(){
-        Object principals =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(!principals.toString().equals("anonymousUser")){
-            org.springframework.security.core.userdetails.User u =
-                    (org.springframework.security.core.userdetails.User)
-                            principals;
-
-            return u.getUsername();
-
-        }else {
-            return "anonymousUser";
-        }
-    }
 
     /**
      * @param u entity that contains information about user

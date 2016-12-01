@@ -6,7 +6,7 @@
 
 <bookmarks:layout pageName="Create event">
 
-<form:form modelAttribute="event" method="post" action="/event/registerEvent" commandName="event">
+<form:form modelAttribute="event" method="post" action="/event/registerEvent" commandName="event" cssClass="col-md-6">
     <div class="form-group">
         <form:label path="name" cssClass="">Event display name</form:label>
         <form:input  path="name" type="text" cssClass="form-control" placeholder="Display name"/>
@@ -20,7 +20,7 @@
     <div class="form-group">
         <form:label path="priv" cssClass="">Is private?</form:label>
         <div class="form-check">
-            <form:radiobuttons path="priv" items="${priv}" cssClass="form-check-input"/>
+            <form:checkbox path="priv" cssClass="form-check-input"/>
         </div>
     </div>
 
@@ -30,31 +30,18 @@
           <form:options items="${age}"/>
         </form:select>
     </div>
+    
+    <form:hidden path="lng" id="formLang" />
+    <form:hidden path="lat" id="formLat"/>
+
+    <input type="submit" value="Submit">
 </form:form>
-
-    <button data-toggle="modal" data-target="#mapWindow" onclick="geoLocation()">OpenMap</button>
-    <!-- Modal -->
-    <div id="mapWindow" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <%--<img src="/resources/images/geolocalization.png"/>--%>
-                    <img style="width: 16px; height: 16px" src="/resources/images/geolocalization.png"/>
-                    <span style="font-weight: bold; margin-left: 33%;">Select event location</span>
-                </div>
-                <div class="modal-body">
-                    <div style="width:100%; height: 500px; border: 3px solid gainsboro; border-radius: 3px;" id="map"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="setCurrentLocation()">Use my current location</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-6">
+        <div style="width:100%; height: 500px; border: 3px solid gainsboro; border-radius: 3px;" id="map"></div>
+        <br>
+        <button type="button" class="btn btn-primary" onclick="setCurrentLocation()">Use my current location</button>
     </div>
+
     <script>
         var map;
         var latLong;
@@ -93,8 +80,12 @@
                 map:map,
                 animation: google.maps.Animation.DROP,
                 title:"Event location!"});
+            document.getElementById("formLat").value = latLong.lat();
+            document.getElementById("formLang").value = latLong.lng();
+
+            console.log("TEST: " + document.getElementById("formLat").value);
         }
-        
+
         function placeMarker(location) {
             clearMarker();
             marker = new google.maps.Marker({
@@ -102,6 +93,8 @@
                 animation: google.maps.Animation.DROP,
                 map: map
             });
+            $("#formLat").value = location.lat();
+            $("#formLang").value = location.lng();
             console.log("Selected marker: lat: " + location.lat() + ", long: " + location.lng());
         }
 
@@ -113,6 +106,6 @@
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1P7VEt0zV5XD8Cg1pDUx_D7VPfF2BB_Q&callback=initMap" async defer></script>
-
+    <script>geoLocation()</script>
 
 </bookmarks:layout>

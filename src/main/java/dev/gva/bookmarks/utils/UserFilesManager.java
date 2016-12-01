@@ -20,8 +20,8 @@ import java.io.IOException;
 public class UserFilesManager {
 
     private static final Logger logger = LoggerFactory.getLogger(UserFilesManager.class);
-    private final String DEFAULT_PROFILE_PHOTO_PATH = "/resources/images/defaultProfilePhoto.png";
-    private final String DEFAULT_WALL_PHOTO_PATH = "/resources/images/defaultWallPhoto.png";
+    private final String DEFAULT_PROFILE_PHOTO_PATH = File.separator + "resources" + File.separator + "images" + File.separator + "defaultProfilePhoto.png";
+    private final String DEFAULT_WALL_PHOTO_PATH = File.separator + "resources" + File.separator +"images" + File.separator + "defaultWallPhoto.png";
 
     @Autowired
     private Environment environment;
@@ -30,10 +30,10 @@ public class UserFilesManager {
 
     public void createUserStore(String username) throws IOException {
         initRootPath();
-        final String userProfile  = rootPath + "/" + username + "/profile";
-        final String userEvents  = rootPath + "/" + username + "/events";
+        final String userProfile  = rootPath + File.separator + username + File.separator +"profile";
+        final String userEvents  = rootPath + File.separator + username + File.separator + "events";
 
-        File f = new File(rootPath + "/" + username);
+        File f = new File(rootPath + File.separator + username);
         if(f.mkdir()){
             logger.debug("Directory created for user:" + username);
             new File(userProfile).mkdir();
@@ -45,8 +45,8 @@ public class UserFilesManager {
 
     public void deleteUserStore(String username) throws IOException {
         initRootPath();
-        final String userProfile  = rootPath + "/" + username + "/profile";
-        final String userEvents  = rootPath + "/" + username + "/events";
+        final String userProfile  = rootPath + File.separator + username + File.separator + "profile";
+        final String userEvents  = rootPath + File.separator + username + File.separator + "events";
 
         new File(userProfile).delete();
         new File(userEvents).delete();
@@ -57,12 +57,12 @@ public class UserFilesManager {
 
     public String getProfilePhoto(String username){
         initRootPath();
-        File photo = new File(rootPath + "/" + username + "/profile/");
+        File photo = new File(rootPath + File.separator + username + File.separator + "profile" + File.separator);
         if(photo.exists()){
             logger.debug("Found user[" + username + "] profile folder");
             for (String s : photo.list()) {
                 if(s.contains("profileImage")){
-                    return "/userResources/" + username + "/profile/" + s;
+                    return  File.separator + "userResources" + File.separator + username + File.separator + "profile" + File.separator + s;
                 }
             }
         }else{
@@ -74,12 +74,12 @@ public class UserFilesManager {
 
     public String getWallPhoto(String username){
         initRootPath();
-        File photo = new File(rootPath + "/" + username + "/profile/");
+        File photo = new File(rootPath + File.separator + username + File.separator + "profile" + File.separator);
         if(photo.exists()) {
             logger.debug("Found user[" + username + "] profile folder");
             for (String s : photo.list()) {
                 if (s.contains("wallImage")) {
-                    return  "/userResources/" + username + "/profile/" + s;
+                    return  File.separator + "userResources" + File.separator + username + File.separator + "profile" + File.separator + s;
                 }
             }
         }else {
@@ -97,7 +97,7 @@ public class UserFilesManager {
 
     public File  getUserProfileDir(String username){
         initRootPath();
-        return new File(rootPath + "/" + username + "/profile");
+        return new File(rootPath + File.separator + username + File.separator + "profile");
     }
 
 
