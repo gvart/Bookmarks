@@ -24,7 +24,7 @@ public class SpringMVCInitializer extends AbstractAnnotationConfigDispatcherServ
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{ AppConfig.class };
+        return new Class<?>[]{AppConfig.class};
     }
 
     @Override
@@ -34,14 +34,13 @@ public class SpringMVCInitializer extends AbstractAnnotationConfigDispatcherServ
 
     @Override
     protected String[] getServletMappings() {
-        return new String[] { "/" };
+        return new String[]{"/"};
     }
-
 
 
     @Override
     protected Filter[] getServletFilters() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter("UTF-8",true);
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter("UTF-8", true);
 
         // Dandelion filter definition and mapping -->
         DandelionFilter dandelionFilter = new DandelionFilter();
@@ -69,6 +68,6 @@ public class SpringMVCInitializer extends AbstractAnnotationConfigDispatcherServ
 
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-        registration.setInitParameter("throwExceptionIfNoHandlerFound","true");
+        registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
     }
 }

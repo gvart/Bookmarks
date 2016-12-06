@@ -2,7 +2,6 @@ package dev.gva.bookmarks.service.ServiceImpl;
 
 import dev.gva.bookmarks.DAO.EventDAO;
 import dev.gva.bookmarks.model.Event;
-import dev.gva.bookmarks.model.User;
 import dev.gva.bookmarks.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

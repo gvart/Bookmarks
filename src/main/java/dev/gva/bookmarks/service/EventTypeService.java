@@ -9,10 +9,15 @@ import java.util.List;
  */
 public interface EventTypeService {
     void addEventType(EventType eventType);
-    void updateEventType (EventType eventType);
+
+    void updateEventType(EventType eventType);
+
     void deleteEventType(EventType eventType);
+
     EventType findEventTypeById(Integer id);
+
     List<EventType> listEventTypes();
+
     EventType findEventTypeByName(String name);
 
 }

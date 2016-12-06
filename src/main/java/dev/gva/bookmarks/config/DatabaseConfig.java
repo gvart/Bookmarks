@@ -27,6 +27,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -48,12 +49,12 @@ public class DatabaseConfig {
     public LocalSessionFactoryBean asessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] { "dev.gva.bookmarks.model" });
+        sessionFactory.setPackagesToScan(new String[]{"dev.gva.bookmarks.model"});
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
 
-    public SessionFactory sessionFactory(){
+    public SessionFactory sessionFactory() {
         return asessionFactory().getObject();
     }
 
@@ -86,56 +87,56 @@ public class DatabaseConfig {
 
 
     @Bean
-    public UserDAO userDAO(){
+    public UserDAO userDAO() {
         UserDAOImpl userDAO = new UserDAOImpl();
         userDAO.setSessionFactory((SessionFactory) sessionFactory());
         return userDAO;
     }
 
     @Bean
-    public UserService userService(){
+    public UserService userService() {
         UserServiceImpl userService = new UserServiceImpl();
         userService.setUserDAO(userDAO());
         return userService;
     }
 
     @Bean
-    public UserRoleDAO userRoleDAO(){
+    public UserRoleDAO userRoleDAO() {
         UserRoleDAOImpl userRoleDAO = new UserRoleDAOImpl();
         userRoleDAO.setSessionFactory(sessionFactory());
         return userRoleDAO;
     }
 
     @Bean
-    public UserRoleService userRoleService(){
+    public UserRoleService userRoleService() {
         UserRoleServiceImpl userRoleService = new UserRoleServiceImpl();
         userRoleService.setUserRoleDAO(userRoleDAO());
         return userRoleService;
     }
 
     @Bean
-    public EventTypeDAO eventTypeDAO(){
+    public EventTypeDAO eventTypeDAO() {
         EventTypeDAOImpl eventTypeDAO = new EventTypeDAOImpl();
         eventTypeDAO.setSessionFactory(sessionFactory());
         return eventTypeDAO;
     }
 
     @Bean
-    public EventTypeService eventTypeService(){
+    public EventTypeService eventTypeService() {
         EventTypeServiceImpl eventTypeService = new EventTypeServiceImpl();
         eventTypeService.setEventTypeDAO(eventTypeDAO());
         return eventTypeService;
     }
 
     @Bean
-    public EventDAO eventDAO(){
+    public EventDAO eventDAO() {
         EventDAOImpl eventDAO = new EventDAOImpl();
         eventDAO.setSessionFactory(sessionFactory());
         return eventDAO;
     }
 
     @Bean
-    public EventService eventService(){
+    public EventService eventService() {
         EventServiceImpl eventService = new EventServiceImpl();
         eventService.setEventDAO(eventDAO());
         return eventService;

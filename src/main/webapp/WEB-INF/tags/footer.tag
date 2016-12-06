@@ -1,8 +1,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
-<%-- Placed at the end of the document so the pages load faster --%>
+<%--
+&lt;%&ndash; Placed at the end of the document so the pages load faster &ndash;%&gt;
 <spring:url value="/vendors/jquery/jquery.min.js" var="jQuery"/>
-<script src="${jQuery}"></script>
+<script src="${jQuery}"></script>--%>
 
 <%-- jquery-ui.js file is really big so we only load what we need instead of loading everything --%>
 <spring:url value="/vendors/jquery-ui/ui/jquery.ui.core.js" var="jQueryUiCore"/>

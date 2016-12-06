@@ -23,15 +23,15 @@ public class MailConfig {
     private Environment environment;
 
     @Bean
-    public JavaMailSenderImpl mailSender(){
+    public JavaMailSenderImpl mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
         Properties properties = new Properties();
-            properties.setProperty("mail.smtp.auth", "true");
-            properties.setProperty("mail.smtp.starttls.enabled", "true");
-            properties.setProperty("mail.smtp.starttls.required", "true");
-            properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            properties.setProperty("mail.smtp.host",environment.getProperty("mail.host"));
+        properties.setProperty("mail.smtp.auth", "true");
+        properties.setProperty("mail.smtp.starttls.enabled", "true");
+        properties.setProperty("mail.smtp.starttls.required", "true");
+        properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.setProperty("mail.smtp.host", environment.getProperty("mail.host"));
 
         mailSender.setUsername(environment.getProperty("mail.username"));
         mailSender.setPassword(environment.getProperty("mail.password"));

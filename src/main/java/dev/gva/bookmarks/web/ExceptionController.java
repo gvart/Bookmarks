@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionController {
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handleError404(HttpServletRequest request, Exception e){
+    public ModelAndView handleError404(HttpServletRequest request, Exception e) {
         ModelAndView modelAndView = new ModelAndView("exception");
         modelAndView.addObject("exception", e);
         return modelAndView;

@@ -28,12 +28,12 @@ public class User {
     @Size(min = 4, message = "Username can't be less than 4 characters")
     private String username;
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     @NotEmpty(message = "Insert password")
     @Size(min = 6, message = "Password can't be less than 6 characters")
     private String password;
 
-    @Column(name = "email",nullable = false)
+    @Column(name = "email", nullable = false)
     @Email(message = "Email is not valid.")
     @NotEmpty(message = "Insert email")
     private String email;
@@ -63,7 +63,8 @@ public class User {
     @Column(name = "quote")
     private String quote;
 
-    public User(){}
+    public User() {
+    }
 
     public User(Integer id, String username, String password) {
         this.id = id;

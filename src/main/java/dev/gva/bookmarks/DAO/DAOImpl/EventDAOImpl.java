@@ -2,17 +2,13 @@ package dev.gva.bookmarks.DAO.DAOImpl;
 
 import dev.gva.bookmarks.DAO.EventDAO;
 import dev.gva.bookmarks.model.Event;
-import dev.gva.bookmarks.model.EventType;
-import dev.gva.bookmarks.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by pika on 27.11.2016.
@@ -24,7 +20,7 @@ public class EventDAOImpl implements EventDAO {
 
     private SessionFactory sessionFactory;
 
-    public void setSessionFactory(SessionFactory sf){
+    public void setSessionFactory(SessionFactory sf) {
         this.sessionFactory = sf;
     }
 
@@ -46,7 +42,7 @@ public class EventDAOImpl implements EventDAO {
     public void deleteEvent(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Event e = (Event) session.load(Event.class, new Integer(id));
-        if(null != e) {
+        if (null != e) {
             session.delete(e);
         }
         logger.info("Event deleted successfully, Event details=" + e);
@@ -61,7 +57,7 @@ public class EventDAOImpl implements EventDAO {
     public List<Event> listEvents() {
         Session session = this.sessionFactory.getCurrentSession();
         List<Event> eventsList = session.createQuery("from Event").list();
-        for(Event e : eventsList){
+        for (Event e : eventsList) {
             logger.info("Events List::" + e);
         }
         return eventsList;

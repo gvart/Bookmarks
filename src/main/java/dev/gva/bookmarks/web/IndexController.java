@@ -1,8 +1,11 @@
 package dev.gva.bookmarks.web;
 
+import dev.gva.bookmarks.exception.NotFoundException;
 import dev.gva.bookmarks.model.User;
+import dev.gva.bookmarks.service.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -19,20 +22,23 @@ public class IndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
+    @Autowired
+    private EventService eventService;
+
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String index(){
+    public String index() {
         return "index";
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.GET)
-    public String login(ModelMap modelMap){
+    public String login(ModelMap modelMap) {
         modelMap.addAttribute("user", new User());
         return "auth/login";
     }
 
 
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
-    public String logout(){
+    public String logout() {
         logger.info("logout...");
         return "auth/login";
     }
@@ -49,7 +55,6 @@ public class IndexController {
         }
         return "403Page";
     }
-
 
 
 }

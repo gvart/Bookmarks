@@ -9,19 +9,18 @@ import dev.gva.bookmarks.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by pika on 11/11/16.
@@ -36,9 +35,8 @@ public class EventController {
     private EventTypeService eventTypeService;
 
     @RequestMapping(path = "/event/create", method = RequestMethod.GET)
-    public String init(ModelMap modelMap){
-
-
+    public String init(ModelMap modelMap) {
+        ArrayList<String> tags = eventTypeService.listEventTypes().stream().map(EventType::getName).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Integer> ageArr = new ArrayList();
         ageArr.add(0);
         ageArr.add(6);
@@ -46,18 +44,19 @@ public class EventController {
         ageArr.add(16);
         ageArr.add(18);
         modelMap.addAttribute("event", new Event());
-        modelMap.addAttribute("age",ageArr);
+        modelMap.addAttribute("age", ageArr);
+        modelMap.addAttribute("eventTypes", tags);
         return "/event/create";
     }
 
 
     @RequestMapping(path = "/event/registerEvent", method = RequestMethod.POST)
-    public String createEvent(@ModelAttribute("event") Event event){
-        event.setDate(new Date());
+    public String createEvent(@ModelAttribute("event") Event event,@Param("eventTypes") List<String> eventTypes) {
+        /*event.setDate(new Date());
         event.setUser(userService.getUserByUsername(
                 AuthenticationService.getLoggedInUser())
         );
-        eventService.addEvent(event);
+        eventService.addEvent(event);*/
 
         return "redirect:/";
     }

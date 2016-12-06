@@ -1,7 +1,6 @@
 package dev.gva.bookmarks.service;
 
 import dev.gva.bookmarks.model.Event;
-import dev.gva.bookmarks.model.User;
 
 import java.util.List;
 
@@ -10,8 +9,12 @@ import java.util.List;
  */
 public interface EventService {
     void addEvent(Event event);
+
     void updateEvent(Event event);
+
     void deleteEvent(int id);
+
     Event findEventById(int id);
+
     List<Event> listEvents();
 }

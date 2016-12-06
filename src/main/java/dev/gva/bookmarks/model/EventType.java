@@ -1,10 +1,8 @@
 package dev.gva.bookmarks.model;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import java.util.Set;
 
 /**
  * Created by pika on 11/11/16.
@@ -22,9 +20,9 @@ public class EventType {
     @NotEmpty(message = "Insert EventType name")
     private String name;
 
-   /* @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "events")
-    private Set<Event> events;
-*/
+    /* @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "events")
+     private Set<Event> events;
+ */
     public int getId() {
         return id;
     }

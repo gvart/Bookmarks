@@ -22,11 +22,11 @@ public class UserRole {
     @Column(name = "role", nullable = false, length = 45)
     private String role;
 
-    public UserRole(){
+    public UserRole() {
 
     }
 
-    public UserRole(User user, String role){
+    public UserRole(User user, String role) {
         this.user = user;
         this.role = role;
     }

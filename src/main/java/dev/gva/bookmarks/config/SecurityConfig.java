@@ -11,8 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.sql.DataSource;
-
 /**
  * Created by pika on 11/9/16.
  */
@@ -34,14 +32,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // The pages does not require login
         http.authorizeRequests().antMatchers("/", "/login", "/logout",
-                "/chat","/app","/topic","/add","/app/add","/topic/message").permitAll();
+                "/chat", "/app", "/topic", "/add", "/app/add", "/topic/message").permitAll();
 
         // /userInfo page requires login as USER or ADMIN.
         // If no login, it will redirect to /login page.
         http.authorizeRequests().antMatchers("/event/create").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
         // For ADMIN only.
-        http.authorizeRequests().antMatchers("/admin/*","/admin").access("hasRole('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/admin/*", "/admin").access("hasRole('ROLE_ADMIN')");
 
         // When the user has logged in as XX.
         // But access a page that requires role YY,

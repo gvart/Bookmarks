@@ -1,6 +1,5 @@
 package dev.gva.bookmarks.DAO;
 
-import dev.gva.bookmarks.model.User;
 import dev.gva.bookmarks.model.UserRole;
 
 import java.util.Set;
@@ -10,9 +9,13 @@ import java.util.Set;
  */
 public interface UserRoleDAO {
 
-    public void addRole(UserRole role);
-    public void addRoles(Set<UserRole> roles);
-    public UserRole getRoleById(Integer id);
-    public void removeRole(UserRole role);
-    public void removeRoles(Set<UserRole> roles);
+    void addRole(UserRole role);
+
+    void addRoles(Set<UserRole> roles);
+
+    UserRole getRoleById(Integer id);
+
+    void removeRole(UserRole role);
+
+    void removeRoles(Set<UserRole> roles);
 }

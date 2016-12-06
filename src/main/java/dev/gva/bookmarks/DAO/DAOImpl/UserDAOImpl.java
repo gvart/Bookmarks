@@ -2,17 +2,13 @@ package dev.gva.bookmarks.DAO.DAOImpl;
 
 import dev.gva.bookmarks.DAO.UserDAO;
 import dev.gva.bookmarks.model.User;
-import dev.gva.bookmarks.model.UserRole;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.internal.QueryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 
 @Repository
@@ -22,7 +18,7 @@ public class UserDAOImpl implements UserDAO {
 
     private SessionFactory sessionFactory;
 
-    public void setSessionFactory(SessionFactory sf){
+    public void setSessionFactory(SessionFactory sf) {
         this.sessionFactory = sf;
     }
 
@@ -44,7 +40,7 @@ public class UserDAOImpl implements UserDAO {
     public List<User> listUsers() {
         Session session = this.sessionFactory.getCurrentSession();
         List<User> usersList = session.createQuery("from User").list();
-        for(User u : usersList){
+        for (User u : usersList) {
             logger.info("Users List::" + u);
         }
         return usersList;
@@ -63,7 +59,7 @@ public class UserDAOImpl implements UserDAO {
         Session session = this.sessionFactory.getCurrentSession();
         User u = (User) session
                 .createQuery("from User where username like ?")
-                .setParameter(0,username)
+                .setParameter(0, username)
                 .uniqueResult();
         logger.info("User loaded Successfully, User details=" + u);
         return u;
@@ -73,22 +69,22 @@ public class UserDAOImpl implements UserDAO {
     public void deleteUser(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         User u = (User) session.load(User.class, new Integer(id));
-        if(null != u) {
+        if (null != u) {
             session.delete(u);
         }
         logger.info("User deleted successfully, User details=" + u);
     }
 
     @Override
-    public boolean userExists(String username){
+    public boolean userExists(String username) {
         Session session = this.sessionFactory.getCurrentSession();
 
         User result = (User) session.
                 createQuery("from User where username like ?")
-                .setParameter(0,username)
+                .setParameter(0, username)
                 .uniqueResult();
 
-        if(!(result == null)) return true;
+        if (!(result == null)) return true;
         return false;
     }
 }

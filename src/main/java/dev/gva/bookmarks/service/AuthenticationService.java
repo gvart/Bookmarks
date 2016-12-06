@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,6 +34,21 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    public static String getLoggedInUser() {
+        Object principals = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!principals.toString().equals("anonymousUser")) {
+            org.springframework.security.core.userdetails.User u =
+                    (org.springframework.security.core.userdetails.User)
+                            principals;
+
+            return u.getUsername();
+
+        } else {
+            return "anonymousUser";
+        }
+    }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -71,31 +85,16 @@ public class AuthenticationService implements UserDetailsService {
         return Result;
     }
 
-    public boolean autoLogin(String username, String password){
+    public boolean autoLogin(String username, String password) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         Authentication auth = authenticationManager.authenticate(token);
 
-        if(auth.isAuthenticated()) {
+        if (auth.isAuthenticated()) {
             logger.debug("Succeed to auth user: " + username);
             SecurityContextHolder.getContext().setAuthentication(auth);
             return true;
         }
 
         return false;
-    }
-
-    public static String getLoggedInUser(){
-        Object principals =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(!principals.toString().equals("anonymousUser")){
-            org.springframework.security.core.userdetails.User u =
-                    (org.springframework.security.core.userdetails.User)
-                            principals;
-
-            return u.getUsername();
-
-        }else {
-            return "anonymousUser";
-        }
     }
 }

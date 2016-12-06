@@ -1,7 +1,6 @@
 package dev.gva.bookmarks.DAO.DAOImpl;
 
 import dev.gva.bookmarks.DAO.UserRoleDAO;
-import dev.gva.bookmarks.model.User;
 import dev.gva.bookmarks.model.UserRole;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,7 +20,7 @@ public class UserRoleDAOImpl implements UserRoleDAO {
 
     private SessionFactory sessionFactory;
 
-    public void setSessionFactory(SessionFactory sf){
+    public void setSessionFactory(SessionFactory sf) {
         this.sessionFactory = sf;
     }
 
@@ -33,7 +32,7 @@ public class UserRoleDAOImpl implements UserRoleDAO {
 
     @Override
     public void addRoles(Set<UserRole> roles) {
-        roles.forEach( role -> addRole(role));
+        roles.forEach(role -> addRole(role));
     }
 
     @Override

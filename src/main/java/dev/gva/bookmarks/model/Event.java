@@ -45,9 +45,9 @@ public class Event {
     private Date date;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "event_eventtypes" ,
+    @JoinTable(name = "event_eventtypes",
             joinColumns = @JoinColumn(name = "event_id"),
-    inverseJoinColumns = @JoinColumn(name = "event_type_id"))
+            inverseJoinColumns = @JoinColumn(name = "event_type_id"))
     private Set<EventType> eventTypes;
 
     @ManyToOne(fetch = FetchType.LAZY)

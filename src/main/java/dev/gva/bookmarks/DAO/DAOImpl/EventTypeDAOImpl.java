@@ -2,7 +2,6 @@ package dev.gva.bookmarks.DAO.DAOImpl;
 
 import dev.gva.bookmarks.DAO.EventTypeDAO;
 import dev.gva.bookmarks.model.EventType;
-import dev.gva.bookmarks.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ public class EventTypeDAOImpl implements EventTypeDAO {
 
     private SessionFactory sessionFactory;
 
-    public void setSessionFactory(SessionFactory sf){
+    public void setSessionFactory(SessionFactory sf) {
         this.sessionFactory = sf;
     }
 
@@ -49,7 +48,7 @@ public class EventTypeDAOImpl implements EventTypeDAO {
     public List<EventType> listEventTypes() {
         Session session = this.sessionFactory.getCurrentSession();
         List<EventType> eventTypes = session.createQuery("from EventType").list();
-        for(EventType et : eventTypes){
+        for (EventType et : eventTypes) {
             logger.info("EventTypes List::" + et);
         }
         return eventTypes;
@@ -58,7 +57,7 @@ public class EventTypeDAOImpl implements EventTypeDAO {
     @Override
     public EventType findEventTypeByName(String name) {
         Session session = this.sessionFactory.getCurrentSession();
-        EventType et = (EventType) session.createQuery("from EventType where name=:name").setParameter("name",name).uniqueResult();
+        EventType et = (EventType) session.createQuery("from EventType where name=:name").setParameter("name", name).uniqueResult();
         logger.info("Event type loaded successfully, EventType details=" + et);
 
         return et;

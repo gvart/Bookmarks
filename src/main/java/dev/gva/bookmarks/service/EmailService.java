@@ -2,12 +2,10 @@ package dev.gva.bookmarks.service;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.velocity.VelocityEngineFactory;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import java.util.Date;
@@ -32,9 +30,9 @@ public class EmailService {
     private VelocityEngine velocityEngine;
 
 
-    public boolean sendMail(final String templateName,final Map<String, Object> model){
+    public boolean sendMail(final String templateName, final Map<String, Object> model) {
         boolean res = false;
-        try{
+        try {
             MimeMessagePreparator preparator = mimeMessage -> {
                 String from = (String) model.get("from");
                 String to[] = (String[]) model.get("to");
@@ -48,15 +46,15 @@ public class EmailService {
                 model.put("noArgs", new Object());
 
                 String text = VelocityEngineUtils.mergeTemplateIntoString(
-                        velocityEngine,templateName,"UTF-8",model);
+                        velocityEngine, templateName, "UTF-8", model);
 
-                message.setText(text,true);
+                message.setText(text, true);
             };
 
             mailSender.send(preparator);
             res = true;
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 

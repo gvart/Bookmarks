@@ -3,22 +3,25 @@ package dev.gva.bookmarks.web;
 import dev.gva.bookmarks.model.EventType;
 import dev.gva.bookmarks.model.User;
 import dev.gva.bookmarks.model.UserRole;
-import dev.gva.bookmarks.service.*;
+import dev.gva.bookmarks.service.EmailService;
+import dev.gva.bookmarks.service.EventTypeService;
+import dev.gva.bookmarks.service.UserRoleService;
+import dev.gva.bookmarks.service.UserService;
 import dev.gva.bookmarks.utils.UserFilesManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by pika on 11/11/16.
@@ -67,13 +70,13 @@ public class AdminController {
         u.setCreateDate(new Date());
         u.setEnabled(true);
 
-        if(!result.hasErrors() && !exists) {
+        if (!result.hasErrors() && !exists) {
             userService.addUser(u);
-            userRoleService.addRole(new UserRole(u,"ROLE_USER"));
-        }else {
-            if(exists){
-                modelMap.addAttribute("error", "User " +  u.getUsername() + " already exists.");
-            }else {
+            userRoleService.addRole(new UserRole(u, "ROLE_USER"));
+        } else {
+            if (exists) {
+                modelMap.addAttribute("error", "User " + u.getUsername() + " already exists.");
+            } else {
                 modelMap.addAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
             }
         }
@@ -81,29 +84,28 @@ public class AdminController {
     }
 
     @RequestMapping(path = "/admin/users/deleteUser", method = RequestMethod.GET)
-    public String deleteUser(@RequestParam("id") int id,ModelMap modelMap) throws IOException {
+    public String deleteUser(@RequestParam("id") int id, ModelMap modelMap) throws IOException {
         User user = userService.getUserById(id);
         userRoleService.removeRoles(user.getUserRoles());
         userService.deleteUser(id);
         userFilesManager.deleteUserStore(user.getUsername());
-        modelMap.addAttribute("user",user);
+        modelMap.addAttribute("user", user);
         return "info/showMessage";
     }
 
     @RequestMapping(path = "/admin/users/listUsers", method = RequestMethod.GET)
-    public String listUsers(ModelMap modelMap){
+    public String listUsers(ModelMap modelMap) {
         modelMap.addAttribute("allUsers", userService.listUsers());
         modelMap.addAttribute("user", new User());
         return "admin/user/listUsers";
     }
 
     /**
-     *Event types mgmt
-     *
+     * Event types mgmt
      */
 
     @RequestMapping(path = "/admin/eventtype/listEventTypes", method = RequestMethod.GET)
-    public String listEventTypes(ModelMap modelMap){
+    public String listEventTypes(ModelMap modelMap) {
         logger.debug("INPARAM##########:" + modelMap.get("error"));
         modelMap.addAttribute("allEventTypes", eventTypeService.listEventTypes());
         modelMap.addAttribute("eventType", new EventType());
@@ -111,25 +113,25 @@ public class AdminController {
     }
 
     @RequestMapping(path = "/admin/eventtype/add", method = RequestMethod.POST)
-    public String addEventType(@Valid @ModelAttribute("eventtype") EventType et, BindingResult result, ModelMap modelMap){
-        if (result.hasErrors() || eventTypeService.findEventTypeByName(et.getName()) != null){
+    public String addEventType(@Valid @ModelAttribute("eventtype") EventType et, BindingResult result, ModelMap modelMap) {
+        if (result.hasErrors() || eventTypeService.findEventTypeByName(et.getName()) != null) {
             //result.getAllErrors().get(0).getDefaultMessage()
             modelMap.addAttribute("error", "Inserted value is not valid.");
-        }else {
+        } else {
             eventTypeService.addEventType(et);
         }
         return "redirect:/admin/eventtype/listEventTypes";
     }
 
     @RequestMapping(path = "/admin/eventtype/delete", method = RequestMethod.GET)
-    public String deleteEventType(@RequestParam("id") int id, ModelMap modelMap){
+    public String deleteEventType(@RequestParam("id") int id, ModelMap modelMap) {
         EventType eventType = eventTypeService.findEventTypeById(id);
         eventTypeService.deleteEventType(eventType);
         return "redirect:/admin/eventtype/listEventTypes";
     }
 
     @RequestMapping(path = "/admin", method = RequestMethod.GET)
-    public String adminControlPanel(){
+    public String adminControlPanel() {
         return "admin/main";
     }
 
