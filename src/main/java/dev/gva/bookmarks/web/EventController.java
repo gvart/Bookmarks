@@ -51,10 +51,10 @@ public class EventController {
 
 
     @RequestMapping(path = "/event/registerEvent", method = RequestMethod.POST)
-    public String createEvent(@ModelAttribute("event") Event event,@Param("eventTypes") List<String> eventTypes) {
+    public String createEvent(@ModelAttribute("event") Event event,@Param("eventTypes") ArrayList<String> eventTypes) {
         /*event.setDate(new Date());
         event.setUser(userService.getUserByUsername(
-                AuthenticationService.getLoggedInUser())
+                AuthenticationService.getLoggedInUser())пше
         );
         eventService.addEvent(event);*/
 
