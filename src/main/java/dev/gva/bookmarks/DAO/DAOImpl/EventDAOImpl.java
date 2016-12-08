@@ -27,7 +27,7 @@ public class EventDAOImpl implements EventDAO {
     @Override
     public void addEvent(Event event) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.persist(event);
+        session.save(event);
         logger.info("Event saved successfully, EventType details=" + event);
     }
 

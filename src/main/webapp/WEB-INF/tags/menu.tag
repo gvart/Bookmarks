@@ -14,11 +14,11 @@
         </div>
         <div class="collapse navbar-collapse" id="navBar">
             <ul class="nav navbar-nav">
-                <li><a href="#">Page 0</a></li>
-                <li><a href="#">Page 1</a></li>
-                <li><a href="#">Page 2</a></li>
                 <sec:authorize access="isAuthenticated()">
-                    <li><a href="/profile/<sec:authentication property="principal.username"/>">Profile</a></li>
+                    <li><a href="/profile/<sec:authentication property="principal.username"/>"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+
+                    <li><a href="/profile/<sec:authentication property="principal.username"/>/invitations"><span class="glyphicon glyphicon-envelope"></span> Invitations</a>
+                    </li>
                 </sec:authorize>
             </ul>
 
@@ -29,6 +29,9 @@
 
                 <sec:authorize access="isFullyAuthenticated()">
                     <li><a href="/event/create"><span class="glyphicon glyphicon-plus"/> Event</a></li>
+                    <sec:authorize access='hasRole("ROLE_ADMIN")'>
+                       <li id="adminButton"><a href="/admin"><span class="glyphicon glyphicon-wrench"></span> Control panel</a></li>
+                    </sec:authorize>
                     <li><a href="/logout"><span class="glyphicon glyphicon-log-out"/> Logout</a></li>
                 </sec:authorize>
             </ul>
@@ -42,4 +45,5 @@
             $(this).addClass("active");
         });
     });
+
 </script>

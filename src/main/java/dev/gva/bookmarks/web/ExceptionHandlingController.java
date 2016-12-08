@@ -23,7 +23,7 @@ public class ExceptionHandlingController {
     public String handleNotFound404(HttpServletRequest request, Exception ex){
         logger.error("Request: " + request.getRequestURI() + " raised " + ex);
 
-        return "404notFound";
+        return "/error/404notFound";
     }
 
 

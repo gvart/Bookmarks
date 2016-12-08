@@ -185,12 +185,6 @@ public class UserController {
         return emailService.sendMail("oneColumnTwoMessages.vm", model);
     }
 
-    @RequestMapping("/test222")
-    @ResponseBody
-    public String test(Principal principal){
-
-        return principal.getName() == null ? principal.getName() : "Anonym";
-    }
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;

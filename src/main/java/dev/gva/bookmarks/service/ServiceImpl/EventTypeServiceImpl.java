@@ -48,6 +48,12 @@ public class EventTypeServiceImpl implements EventTypeService {
 
     @Override
     @Transactional
+    public List<EventType> listOrderedEventTypes(String order) {
+        return this.eventTypeDAO.listOrderedEventTypes(order);
+    }
+
+    @Override
+    @Transactional
     public EventType findEventTypeByName(String name) {
         return this.eventTypeDAO.findEventTypeByName(name);
     }

@@ -20,6 +20,8 @@ public interface EventTypeDAO {
 
     List<EventType> listEventTypes();
 
+    List<EventType> listOrderedEventTypes(String order);
+
     EventType findEventTypeByName(String name);
 
 }

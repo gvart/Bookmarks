@@ -38,12 +38,13 @@
         <form:hidden path="lng" id="formLang"/>
         <form:hidden path="lat" id="formLat"/>
         <div class="form-group">
-            <select multiple="multiple">
+            <select multiple name="et" id="tags" style="width:100%">
                 <c:forEach items="${eventTypes}" var="e">
                     <option value=${e}>${e}</option>
                 </c:forEach>
             </select>
         </div>
+
         <input type="submit" value="Submit">
     </form:form>
     <div class="col-md-6">
@@ -52,6 +53,15 @@
         <button type="button" class="btn btn-primary" onclick="setCurrentLocation()">Use my current location</button>
     </div>
 
+    <script src="/vendors/select2-4.0.3/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#tags").select2({
+                placeholder:"Select tags",
+                maximumSelectionLength: 5
+            });
+        });
+    </script>
     <script>
         var map;
         var latLong;
@@ -116,8 +126,10 @@
         }
 
     </script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1P7VEt0zV5XD8Cg1pDUx_D7VPfF2BB_Q&callback=initMap"
             async defer></script>
     <script>geoLocation()</script>
+
 
 </bookmarks:layout>

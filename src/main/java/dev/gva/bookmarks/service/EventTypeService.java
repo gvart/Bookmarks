@@ -18,6 +18,8 @@ public interface EventTypeService {
 
     List<EventType> listEventTypes();
 
+    List<EventType> listOrderedEventTypes(String order);
+
     EventType findEventTypeByName(String name);
 
 }

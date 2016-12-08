@@ -1,5 +1,6 @@
 package dev.gva.bookmarks.web;
 
+import dev.gva.bookmarks.constants.Order;
 import dev.gva.bookmarks.model.Event;
 import dev.gva.bookmarks.model.EventType;
 import dev.gva.bookmarks.service.AuthenticationService;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -36,7 +38,7 @@ public class EventController {
 
     @RequestMapping(path = "/event/create", method = RequestMethod.GET)
     public String init(ModelMap modelMap) {
-        ArrayList<String> tags = eventTypeService.listEventTypes().stream().map(EventType::getName).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<String> tags = eventTypeService.listOrderedEventTypes(Order.ASCENDENT).stream().map(EventType::getName).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Integer> ageArr = new ArrayList();
         ageArr.add(0);
         ageArr.add(6);
@@ -51,12 +53,25 @@ public class EventController {
 
 
     @RequestMapping(path = "/event/registerEvent", method = RequestMethod.POST)
-    public String createEvent(@ModelAttribute("event") Event event,@Param("eventTypes") ArrayList<String> eventTypes) {
-        /*event.setDate(new Date());
+    public String createEvent(@ModelAttribute("event") Event event,HttpServletRequest request) {
+        event.setDate(new Date());
         event.setUser(userService.getUserByUsername(
-                AuthenticationService.getLoggedInUser())пше
+                AuthenticationService.getLoggedInUser())
         );
-        eventService.addEvent(event);*/
+
+        Set<EventType> eventsToAdd = new HashSet();
+        //get all ET compare name of selected and add to set;
+        for (EventType eventType : eventTypeService.listEventTypes()) {
+            for (String et : request.getParameterValues("et")) {
+                if(et.equals(eventType.getName())){
+                    eventsToAdd.add(eventType);
+                }
+            }
+        }
+        event.setEventTypes(eventsToAdd);
+        eventService.addEvent(event);
+
+        logger.debug("Event " + event.getName() + "added.");
 
         return "redirect:/";
     }

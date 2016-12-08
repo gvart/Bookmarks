@@ -55,6 +55,16 @@ public class EventTypeDAOImpl implements EventTypeDAO {
     }
 
     @Override
+    public List<EventType> listOrderedEventTypes(String order) {
+        Session session = this.sessionFactory.getCurrentSession();
+        List<EventType> eventTypes = session.createQuery("from EventType et order by et.name " + order).list();
+        for (EventType et : eventTypes) {
+            logger.info("EventTypes List::" + et);
+        }
+        return eventTypes;
+    }
+
+    @Override
     public EventType findEventTypeByName(String name) {
         Session session = this.sessionFactory.getCurrentSession();
         EventType et = (EventType) session.createQuery("from EventType where name=:name").setParameter("name", name).uniqueResult();
