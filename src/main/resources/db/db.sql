@@ -26,6 +26,8 @@ CREATE TABLE events
   user_id     INTEGER               NOT NULL,
   private     BOOLEAN DEFAULT FALSE,
   date        DATE                  NOT NULL,
+  street      varchar(200)          not null,
+  price       DOUBLE PRECISION      DEFAULT 0,
   CONSTRAINT fk_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
 );
 CREATE TABLE user_roles

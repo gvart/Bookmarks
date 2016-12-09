@@ -1,5 +1,6 @@
 package dev.gva.bookmarks.web;
 
+import dev.gva.bookmarks.constants.ImageType;
 import dev.gva.bookmarks.model.User;
 import dev.gva.bookmarks.model.UserRole;
 import dev.gva.bookmarks.service.AuthenticationService;
@@ -77,7 +78,7 @@ public class UserController {
                 return "redirect:/profile/" + u.getUsername();
             }
             logger.error("Failed to auth user: " + u);
-            return "exception";
+            return "index";
 
         } else {
             if (exists) {
@@ -133,17 +134,7 @@ public class UserController {
     @RequestMapping(value = "/user/setProfilePhoto", method = RequestMethod.POST)
     public void uploadProfilePhoto(@RequestParam("media") MultipartFile file) throws IOException {
         String user = AuthenticationService.getLoggedInUser();
-
-        logger.debug("Start update profile photo for user:" + user);
-
-        File dir = userFilesManager.getUserProfileDir(AuthenticationService.getLoggedInUser());
-        userFilesManager.deleteUserProfilePhoto(user);
-
-        // Create the file on server
-        File serverFile = new File(dir.getAbsolutePath() + File.separator + "profileImage.png");
-        BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
-        ImageIO.write(bufferedImage, "png", serverFile);
-        bufferedImage.flush();
+        userFilesManager.uploadImage(ImageType.PROFILE_IMAGE, user, file.getInputStream());
     }
 
     /**
@@ -154,18 +145,7 @@ public class UserController {
     @RequestMapping(value = "/user/setWallPhoto", method = RequestMethod.POST)
     public void uploadWallPhoto(@RequestParam("media") MultipartFile file) throws IOException {
         String user = AuthenticationService.getLoggedInUser();
-
-        logger.debug("Start update wall photo for user:" + user);
-
-        File dir = userFilesManager.getUserProfileDir(AuthenticationService.getLoggedInUser());
-        userFilesManager.deleteUserWallPhoto(user);
-
-        // Create the file on server
-        File serverFile = new File(dir.getAbsolutePath() + File.separator + "wallImage.png");
-
-        BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
-        ImageIO.write(bufferedImage, "png", serverFile);
-        bufferedImage.flush();
+        userFilesManager.uploadImage(ImageType.WALL_IMAGE, user, file.getInputStream());
     }
 
     /**

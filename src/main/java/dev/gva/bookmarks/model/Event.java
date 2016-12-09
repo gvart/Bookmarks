@@ -39,6 +39,12 @@ public class Event {
     @Column(name = "private")
     private boolean priv;
 
+    @Column(name = "price")
+    private float price;
+
+    @Column(name = "street")
+    private String street;
+
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     @Column(name = "date", nullable = false)
@@ -127,6 +133,31 @@ public class Event {
         this.date = date;
     }
 
+    public Set<EventType> getEventTypes() {
+        return eventTypes;
+    }
+
+    public void setEventTypes(Set<EventType> eventTypes) {
+        this.eventTypes = eventTypes;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,9 +170,12 @@ public class Event {
         if (Float.compare(event.lat, lat) != 0) return false;
         if (Float.compare(event.lng, lng) != 0) return false;
         if (priv != event.priv) return false;
+        if (Float.compare(event.price, price) != 0) return false;
         if (name != null ? !name.equals(event.name) : event.name != null) return false;
         if (description != null ? !description.equals(event.description) : event.description != null) return false;
+        if (street != null ? !street.equals(event.street) : event.street != null) return false;
         if (date != null ? !date.equals(event.date) : event.date != null) return false;
+        if (eventTypes != null ? !eventTypes.equals(event.eventTypes) : event.eventTypes != null) return false;
         return user != null ? user.equals(event.user) : event.user == null;
 
     }
@@ -155,16 +189,29 @@ public class Event {
         result = 31 * result + (lat != +0.0f ? Float.floatToIntBits(lat) : 0);
         result = 31 * result + (lng != +0.0f ? Float.floatToIntBits(lng) : 0);
         result = 31 * result + (priv ? 1 : 0);
+        result = 31 * result + (price != +0.0f ? Float.floatToIntBits(price) : 0);
+        result = 31 * result + (street != null ? street.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (eventTypes != null ? eventTypes.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
 
-    public Set<EventType> getEventTypes() {
-        return eventTypes;
-    }
-
-    public void setEventTypes(Set<EventType> eventTypes) {
-        this.eventTypes = eventTypes;
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", age=" + age +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                ", priv=" + priv +
+                ", price=" + price +
+                ", street='" + street + '\'' +
+                ", date=" + date +
+                ", eventTypes=" + eventTypes +
+                ", user=" + user +
+                '}';
     }
 }

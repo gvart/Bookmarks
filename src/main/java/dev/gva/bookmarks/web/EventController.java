@@ -3,30 +3,29 @@ package dev.gva.bookmarks.web;
 import dev.gva.bookmarks.constants.Order;
 import dev.gva.bookmarks.model.Event;
 import dev.gva.bookmarks.model.EventType;
+import dev.gva.bookmarks.model.User;
 import dev.gva.bookmarks.service.AuthenticationService;
 import dev.gva.bookmarks.service.EventService;
 import dev.gva.bookmarks.service.EventTypeService;
 import dev.gva.bookmarks.service.UserService;
+import dev.gva.bookmarks.utils.GoogleMapsWorker;
+import dev.gva.bookmarks.utils.UserFilesManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-/**
- * Created by pika on 11/11/16.
- */
+
 @Controller
 public class EventController {
 
@@ -35,11 +34,16 @@ public class EventController {
     private EventService eventService;
     private UserService userService;
     private EventTypeService eventTypeService;
+    private UserFilesManager userFilesManager;
+    private GoogleMapsWorker googleMapsWorker;
 
     @RequestMapping(path = "/event/create", method = RequestMethod.GET)
     public String init(ModelMap modelMap) {
-        ArrayList<String> tags = eventTypeService.listOrderedEventTypes(Order.ASCENDENT).stream().map(EventType::getName).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Integer> ageArr = new ArrayList();
+        ArrayList<String> tags = eventTypeService.
+                listOrderedEventTypes(Order.ASCENDENT).stream().
+                map(EventType::getName).collect(Collectors.toCollection(ArrayList::new));
+
+        ArrayList<Integer> ageArr = new ArrayList<>();
         ageArr.add(0);
         ageArr.add(6);
         ageArr.add(12);
@@ -51,15 +55,21 @@ public class EventController {
         return "/event/create";
     }
 
+    @RequestMapping(path = "/event/create", method = RequestMethod.POST)
+    public String init(){
+        //IDK how to fix it. form is send using ajax and after alert closing create another post request there!
+        return "redirect:/";
+    }
+
 
     @RequestMapping(path = "/event/registerEvent", method = RequestMethod.POST)
-    public String createEvent(@ModelAttribute("event") Event event,HttpServletRequest request) {
+    public String createEvent(@ModelAttribute("event") Event event, @RequestParam("media") MultipartFile file,HttpServletRequest request) throws Exception {
+        User user = userService.getUserByUsername(AuthenticationService.getLoggedInUser());
         event.setDate(new Date());
-        event.setUser(userService.getUserByUsername(
-                AuthenticationService.getLoggedInUser())
-        );
+        event.setUser(user);
+        event.setStreet(googleMapsWorker.getAddress(event.getLat(),event.getLng()));
 
-        Set<EventType> eventsToAdd = new HashSet();
+        HashSet<EventType> eventsToAdd = new HashSet<>();
         //get all ET compare name of selected and add to set;
         for (EventType eventType : eventTypeService.listEventTypes()) {
             for (String et : request.getParameterValues("et")) {
@@ -70,8 +80,9 @@ public class EventController {
         }
         event.setEventTypes(eventsToAdd);
         eventService.addEvent(event);
+        logger.debug("Event " + event + "added.");
 
-        logger.debug("Event " + event.getName() + "added.");
+        userFilesManager.uploadImage(event,user.getUsername(),file.getInputStream());
 
         return "redirect:/";
     }
@@ -90,5 +101,15 @@ public class EventController {
     @Autowired
     public void setEventTypeService(EventTypeService eventTypeService) {
         this.eventTypeService = eventTypeService;
+    }
+
+    @Autowired
+    public void setUserFilesManager(UserFilesManager userFilesManager) {
+        this.userFilesManager = userFilesManager;
+    }
+
+    @Autowired
+    public void setGoogleMapsWorker(GoogleMapsWorker googleMapsWorker) {
+        this.googleMapsWorker = googleMapsWorker;
     }
 }

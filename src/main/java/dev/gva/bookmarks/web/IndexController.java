@@ -22,11 +22,11 @@ public class IndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-    @Autowired
     private EventService eventService;
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String index() {
+    public String index(ModelMap modelMap) {
+        modelMap.addAttribute("allowedEvents",eventService.listEvents());
         return "index";
     }
 
@@ -53,8 +53,11 @@ public class IndexController {
             model.addAttribute("msg",
                     "You do not have permission to access this page!");
         }
-        return "403Page";
+        return "error/403Page";
     }
 
-
+    @Autowired
+    public void setEventService(EventService eventService) {
+        this.eventService = eventService;
+    }
 }

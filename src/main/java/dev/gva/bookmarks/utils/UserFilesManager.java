@@ -1,12 +1,20 @@
 package dev.gva.bookmarks.utils;
 
+import dev.gva.bookmarks.constants.ImageType;
+import dev.gva.bookmarks.model.Event;
+import dev.gva.bookmarks.model.User;
+import dev.gva.bookmarks.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by pika on 11/25/16.
@@ -19,6 +27,7 @@ public class UserFilesManager {
 
     @Autowired
     private Environment environment;
+
     private String rootPath = "";
 
 
@@ -94,6 +103,10 @@ public class UserFilesManager {
         return new File(rootPath + File.separator + username + File.separator + "profile");
     }
 
+    public File getUserEventsDir(String username){
+        initRootPath();
+        return new File(rootPath + File.separator + username + File.separator + "events");
+    }
 
     public String getExtension(String fileName) throws Exception {
         String f[] = fileName.split("\\.");
@@ -125,4 +138,48 @@ public class UserFilesManager {
         }
         logger.debug("Profile photo for user " + username + " is deleted.");
     }
+
+    public void uploadImage(ImageType type, String username, InputStream fileInputStream) throws IOException {
+        logger.debug("Upload started. " + type + " image for user:" + username);
+
+
+        File dir = null;
+        String fileName = null;
+        if(type.equals(ImageType.WALL_IMAGE)) {
+            deleteUserWallPhoto(username);
+            dir = getUserProfileDir(username);
+            fileName = "wallImage.png";
+        }else if(type.equals(ImageType.PROFILE_IMAGE)){
+            deleteUserProfilePhoto(username);
+            fileName = "profileImage.png";
+            dir = getUserProfileDir(username);
+        }else if (type.equals(ImageType.EVENT_IMAGE)){
+            fileName = "";
+            dir = getUserEventsDir(username);
+        }
+
+        // Create new file on server
+        File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+        BufferedImage bufferedImage = ImageIO.read(fileInputStream);
+        ImageIO.write(bufferedImage, "png", serverFile);
+        bufferedImage.flush();
+    }
+
+    public void uploadImage(Event event,String username, InputStream fileInputStream) throws IOException {
+        logger.debug("Upload started. " + event.getName() + " image for user:" + username);
+
+        File dir = getUserEventsDir(username);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        logger.debug("Input date: " + event.getDate());
+        String fileName = event.getName() + " " + sdf.format(event.getDate()) + ".png";
+
+        // Create new file on server
+        File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+        logger.debug("Image uploaded path: " + serverFile.getAbsolutePath());
+        BufferedImage bufferedImage = ImageIO.read(fileInputStream);
+        ImageIO.write(bufferedImage, "png", serverFile);
+        bufferedImage.flush();
+    }
+
+   // public void addEventImage(User user,)
 }

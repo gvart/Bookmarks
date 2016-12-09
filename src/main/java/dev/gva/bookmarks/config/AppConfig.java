@@ -1,5 +1,6 @@
 package dev.gva.bookmarks.config;
 
+import dev.gva.bookmarks.utils.GoogleMapsWorker;
 import dev.gva.bookmarks.utils.UserFilesManager;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -99,5 +100,10 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setMaxInMemorySize(20480); //20MB
         return multipartResolver;
+    }
+
+    @Bean
+    public GoogleMapsWorker googleMapsWorker(){
+        return new GoogleMapsWorker();
     }
 }
