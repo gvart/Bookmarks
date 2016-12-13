@@ -8,7 +8,6 @@
     <div class="col-lg-12">
 
        <h2 class="title"><spring:message code="title" /></h2>
-        <a href="/chat">Test chat.</a>
         <div class="col-lg-offset-1 col-lg-8">
             <c:forEach items="${allowedEvents}" var="event">
                 <div class="col-md-12" id="eventBox" style="height: 100%; padding-top: 20px;border: 3px solid salmon;
@@ -16,12 +15,6 @@
                     <div class="col-md-3">
                         <div class="thumbnail">
                             <img style="width:100%" src="http://www.w3schools.com/w3images/nature.jpg">
-                        </div>
-                        <div id="tagsBox" style="float: left">
-                            <c:forEach items="${event.eventTypes}" var="tag">
-                                    <span style="color:white; border-radius: 4px; background-color: #0088cc; padding: 2px; margin-left: 5px;
-                                     ">${tag.name}</span>
-                            </c:forEach>
                         </div>
                     </div>
                     <div class="col-md-9" style="height: 100%; padding-bottom: 5px;" id="InformationBox">
@@ -31,6 +24,12 @@
                             <p style="float: left;"><b>Price:</b>${event.price} Lei,  ${event.date}</p>
                             <p style="float: right"><b>Address:</b> ${event.street}</p>
                             <br>
+                            <div id="tagsBox" style="float: right">
+                                <c:forEach items="${event.eventTypes}" var="tag">
+                                    <span style="color:white; border-radius: 4px; background-color: #0088cc; padding: 2px; margin-left: 5px;
+                                     ">${tag.name}</span>
+                                </c:forEach>
+                            </div>
                         </div>
                     </div>
                 </div>
