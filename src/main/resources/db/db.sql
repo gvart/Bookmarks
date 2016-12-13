@@ -1,13 +1,12 @@
 CREATE TABLE event_eventtypes
 (
-  id            BIGSERIAL PRIMARY KEY NOT NULL,
-  event_id      INTEGER               NOT NULL,
-  event_type_id INTEGER               NOT NULL,
+  event_id      INTEGER NOT NULL,
+  event_type_id INTEGER NOT NULL,
   CONSTRAINT event_eventtypes_event_id_fkey FOREIGN KEY (event_id) REFERENCES events (id),
-  CONSTRAINT event_eventtypes_event_type_id_fkey FOREIGN KEY (event_type_id) REFERENCES event_types (id)
+  CONSTRAINT event_eventtypes_event_type_id_fkey FOREIGN KEY (event_type_id) REFERENCES event_types (id),
+  CONSTRAINT event_eventtypes_pkey PRIMARY KEY (event_id,event_type_id)
 );
-ALTER TABLE event_eventtypes
-  ADD PRIMARY KEY (event_id, event_type_id);
+
 CREATE TABLE event_types
 (
   id   BIGSERIAL PRIMARY KEY NOT NULL,
@@ -25,11 +24,13 @@ CREATE TABLE events
   lng         DOUBLE PRECISION      NOT NULL,
   user_id     INTEGER               NOT NULL,
   private     BOOLEAN DEFAULT FALSE,
-  date        DATE                  NOT NULL,
+  start_date  TIMESTAMP             NOT NULL,
+  create_date TIMESTAMP             NOT NULL,
   street      varchar(200)          not null,
   price       DOUBLE PRECISION      DEFAULT 0,
   CONSTRAINT fk_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
 );
+
 CREATE TABLE user_roles
 (
   user_role_id BIGSERIAL PRIMARY KEY NOT NULL,
@@ -50,4 +51,14 @@ CREATE TABLE users
   createdate DATE,
   enabled    BOOLEAN      DEFAULT TRUE,
   quote      VARCHAR(100) DEFAULT '' :: CHARACTER VARYING
+);
+
+CREATE TABLE user_friends
+(
+  user_id   INTEGER               NOT NULL,
+  friend_id INTEGER   PRIMARY KEY NOT NULL,
+
+  CONSTRAINT user_friends_user_id_fkey FOREIGN KEY (user_id) REFERENCES users (id),
+  CONSTRAINT user_friends_friend_id_fkey FOREIGN KEY (friend_id) REFERENCES users (id),
+  CONSTRAINT user_friends_pkey PRIMARY KEY (user_id,friend_id)
 );

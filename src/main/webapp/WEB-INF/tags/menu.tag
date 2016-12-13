@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core_1_1" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-inverse navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navBar">
@@ -15,24 +15,64 @@
         <div class="collapse navbar-collapse" id="navBar">
             <ul class="nav navbar-nav">
                 <sec:authorize access="isAuthenticated()">
-                    <li><a href="/profile/<sec:authentication property="principal.username"/>"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+                    <li>
+                        <a href="/profile/<sec:authentication property="principal.username"/>">
+                            <span class="glyphicon glyphicon-user"></span>
+                             <spring:message code="menu_profile"/>
+                        </a>
+                    </li>
 
-                    <li><a href="/profile/<sec:authentication property="principal.username"/>/invitations"><span class="glyphicon glyphicon-envelope"></span> Invitations</a>
+                    <li>
+                        <a href="/profile/<sec:authentication property="principal.username"/>/invitations">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <spring:message code="menu_invitations"/>
+                        </a>
                     </li>
                 </sec:authorize>
             </ul>
 
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="<spring:message code="search_placeholder"/>" name="q">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <ul class="nav navbar-nav navbar-right">
                 <sec:authorize access="isAnonymous()">
-                    <li><a href="/login"><span class="glyphicon glyphicon-user"></span> Register/Login</a></li>
+                    <li>
+                        <a href="/login">
+                            <span class="glyphicon glyphicon-user"></span>
+                             <spring:message code="menu_register_login"/>
+                        </a>
+                    </li>
                 </sec:authorize>
 
                 <sec:authorize access="isFullyAuthenticated()">
-                    <li><a href="/event/create"><span class="glyphicon glyphicon-plus"/> Event</a></li>
+                    <li>
+                        <a href="/event/create">
+                            <span class="glyphicon glyphicon-plus"/>
+                             <spring:message code="menu_create_event"/>
+                        </a>
+                    </li>
                     <sec:authorize access='hasRole("ROLE_ADMIN")'>
-                       <li id="adminButton"><a href="/admin"><span class="glyphicon glyphicon-wrench"></span> Control panel</a></li>
+                       <li id="adminButton">
+                           <a href="/admin">
+                               <span class="glyphicon glyphicon-wrench"></span>
+                                <spring:message code="menu_admin_control_panel"/>
+                           </a>
+                       </li>
                     </sec:authorize>
-                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"/> Logout</a></li>
+                    <li>
+                        <a href="/logout">
+                            <span class="glyphicon glyphicon-log-out"/>
+                             <spring:message code="menu_logout"/>
+                        </a>
+                    </li>
                 </sec:authorize>
             </ul>
         </div>

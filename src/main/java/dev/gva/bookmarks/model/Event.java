@@ -47,8 +47,13 @@ public class Event {
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-    @Column(name = "date", nullable = false)
-    private Date date;
+    @Column(name = "create_date", nullable = false)
+    private Date createDate;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @Column(name = "start_date", nullable = false)
+    private Date startDate;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "event_eventtypes",
@@ -125,14 +130,6 @@ public class Event {
         this.user = user;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public Set<EventType> getEventTypes() {
         return eventTypes;
     }
@@ -157,6 +154,21 @@ public class Event {
         this.price = price;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -174,7 +186,8 @@ public class Event {
         if (name != null ? !name.equals(event.name) : event.name != null) return false;
         if (description != null ? !description.equals(event.description) : event.description != null) return false;
         if (street != null ? !street.equals(event.street) : event.street != null) return false;
-        if (date != null ? !date.equals(event.date) : event.date != null) return false;
+        if (createDate != null ? !createDate.equals(event.createDate) : event.createDate != null) return false;
+        if (startDate != null ? !startDate.equals(event.startDate) : event.startDate != null) return false;
         if (eventTypes != null ? !eventTypes.equals(event.eventTypes) : event.eventTypes != null) return false;
         return user != null ? user.equals(event.user) : event.user == null;
 
@@ -191,7 +204,8 @@ public class Event {
         result = 31 * result + (priv ? 1 : 0);
         result = 31 * result + (price != +0.0f ? Float.floatToIntBits(price) : 0);
         result = 31 * result + (street != null ? street.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
         result = 31 * result + (eventTypes != null ? eventTypes.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
@@ -209,7 +223,8 @@ public class Event {
                 ", priv=" + priv +
                 ", price=" + price +
                 ", street='" + street + '\'' +
-                ", date=" + date +
+                ", createDate=" + createDate +
+                ", startDate=" + startDate +
                 ", eventTypes=" + eventTypes +
                 ", user=" + user +
                 '}';

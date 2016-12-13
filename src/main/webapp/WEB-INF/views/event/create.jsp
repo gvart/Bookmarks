@@ -6,31 +6,38 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <bookmarks:layout pageName="Create event">
-
-    <form:form enctype="multipart/form-data" id="eventForm" modelAttribute="event" method="post"  commandName="event"
+    <form:form enctype="multipart/form-data" id="eventForm" modelAttribute="event" method="post" commandName="event"
                cssClass="col-md-6">
         <div class="form-group">
-            <form:label path="name" cssClass="">Event display name</form:label>
+            <form:label path="name" cssClass="">
+                <spring:message code="event_displayName"/>
+            </form:label>
             <form:input path="name" type="text" cssClass="form-control" placeholder="Display name"/>
         </div>
 
         <div class="form-group">
-            <form:label path="description" cssClass="">Description</form:label>
-            <form:textarea path="description" cssClass="form-control"/>
+            <form:label path="description" cssClass="">
+                <spring:message code="event_description"/>
+            </form:label>
+            <form:textarea path="description" rows="10" cssClass="form-control"/>
         </div>
 
         <div class="form-group">
-            <form:label path="priv" cssClass="">Make private? <span
-                    style="font-family:'Open Sans', sans-serif; font-size:11px; color: dodgerblue;">
-                (It will be seen by your friends and people who you send invitation.)</span></form:label>
+            <form:label path="priv" cssClass="">
+                <spring:message code="event_private"/>
+                    <span style="font-family:'Open Sans', sans-serif; font-size:11px; color: dodgerblue;">
+                        (<spring:message code="event_help.message_private"/> )
+                    </span>
+            </form:label>
             <div style="float: right" class="form-check">
                 <form:checkbox path="priv" cssClass="form-check-input"/>
             </div>
         </div>
 
         <div class="form-group">
-            <form:label path="age" cssClass="">Age limit</form:label>
-
+            <form:label path="age" cssClass="">
+                <spring:message code="event_age"/>
+            </form:label>
             <form:select path="age" cssClass="form-control">
                 <form:options items="${age}"/>
             </form:select>
@@ -47,16 +54,25 @@
         </div>
 
         <div class="form-group">
-            <label>Event image</label>
+            <label><spring:message code="event_image"/></label>
             <input type="file" name="media" id="profileImageFileLoader"/>
         </div>
 
         <div class="form-group">
-            <form:label path="price" cssClass="">Price per unit</form:label>
+            <form:label path="price" cssClass="">
+                <spring:message code="event_price"/>
+            </form:label>
             <form:input path="price" cssClass="form-control"/>
         </div>
-
-        <input size="16" type="text" value="2012-06-15 14:45" readonly class="form_datetime">
+        <div class="form-group">
+            <label>
+                <spring:message code="event_start_date"/>
+                <span style="font-family:'Open Sans', sans-serif; font-size:11px; color: dodgerblue;">
+                    (<spring:message code="event_help.message_date"/>)
+                </span>
+            </label>
+            <input name="startDate" readonly="true" class="form_datetime"/>
+        </div>
 
         <script type="text/javascript" src="/vendors/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
         <script type="text/javascript">
@@ -69,7 +85,7 @@
                 startDate:"+0d"
             });
         </script>
-
+        <br>
         <button class="btn-md btn-primary">Submit</button>
     </form:form>
     <div class="col-md-6">
@@ -170,6 +186,9 @@
                 async: false,
                 success: function () {
                         alert("Event added!");
+                },
+                error: function () {
+                    alert("Failed to create event");
                 },
                 cache:false,
                 contentType:false,

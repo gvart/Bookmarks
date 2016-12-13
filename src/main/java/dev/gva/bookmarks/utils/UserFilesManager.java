@@ -98,12 +98,12 @@ public class UserFilesManager {
         }
     }
 
-    public File getUserProfileDir(String username) {
+    private File getUserProfileDir(String username) {
         initRootPath();
         return new File(rootPath + File.separator + username + File.separator + "profile");
     }
 
-    public File getUserEventsDir(String username){
+    private File getUserEventsDir(String username){
         initRootPath();
         return new File(rootPath + File.separator + username + File.separator + "events");
     }
@@ -123,7 +123,7 @@ public class UserFilesManager {
         }
     }
 
-    public void deleteUserProfilePhoto(String username) {
+    private void deleteUserProfilePhoto(String username) {
         String profilePhoto = getProfilePhoto(username);
         if (!profilePhoto.equals(DEFAULT_PROFILE_PHOTO_PATH)) {
             new File(profilePhoto).delete();
@@ -131,7 +131,7 @@ public class UserFilesManager {
         logger.debug("Profile photo for user " + username + " is deleted.");
     }
 
-    public void deleteUserWallPhoto(String username) {
+    private void deleteUserWallPhoto(String username) {
         String wallPhoto = getWallPhoto(username);
         if (!wallPhoto.equals(DEFAULT_WALL_PHOTO_PATH)) {
             new File(DEFAULT_PROFILE_PHOTO_PATH).delete();
@@ -170,8 +170,8 @@ public class UserFilesManager {
 
         File dir = getUserEventsDir(username);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        logger.debug("Input date: " + event.getDate());
-        String fileName = event.getName() + " " + sdf.format(event.getDate()) + ".png";
+        logger.debug("Input date: " + event.getStartDate());
+        String fileName = event.getName() + " " + sdf.format(event.getStartDate()) + ".png";
 
         // Create new file on server
         File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);

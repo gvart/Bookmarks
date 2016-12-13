@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="bookmarks" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -21,7 +21,7 @@
                         <h1>${event.name}</h1>
                         <p>${event.description}</p>
                         <div id="priceDateStreetBox">
-                            <p style="float: left;"><b>Price:</b>${event.price} Lei,  ${event.date}</p>
+                            <p style="float: left;"><b>Price:</b>${event.price} Lei,  ${event.startDate}</p>
                             <p style="float: right"><b>Address:</b> ${event.street}</p>
                             <br>
                             <div id="tagsBox" style="float: right">

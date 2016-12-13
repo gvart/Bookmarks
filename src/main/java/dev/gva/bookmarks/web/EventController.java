@@ -8,6 +8,7 @@ import dev.gva.bookmarks.service.AuthenticationService;
 import dev.gva.bookmarks.service.EventService;
 import dev.gva.bookmarks.service.EventTypeService;
 import dev.gva.bookmarks.service.UserService;
+import dev.gva.bookmarks.utils.DateParser;
 import dev.gva.bookmarks.utils.GoogleMapsWorker;
 import dev.gva.bookmarks.utils.UserFilesManager;
 import org.slf4j.Logger;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,27 +67,29 @@ public class EventController {
 
 
     @RequestMapping(path = "/event/registerEvent", method = RequestMethod.POST)
-    public String createEvent(@ModelAttribute("event") Event event, @RequestParam("media") MultipartFile file,HttpServletRequest request) throws Exception {
-        User user = userService.getUserByUsername(AuthenticationService.getLoggedInUser());
-        event.setDate(new Date());
-        event.setUser(user);
-        event.setStreet(googleMapsWorker.getAddress(event.getLat(),event.getLng()));
+    public String createEvent(@ModelAttribute("event") Event event, @RequestParam("media") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws Exception {
+            User user = userService.getUserByUsername(AuthenticationService.getLoggedInUser());
+            event.setCreateDate(new Date());
+            event.setUser(user);
+            event.setStreet(googleMapsWorker.getAddress(event.getLat(), event.getLng()));
 
-        HashSet<EventType> eventsToAdd = new HashSet<>();
-        //get all ET compare name of selected and add to set;
-        for (EventType eventType : eventTypeService.listEventTypes()) {
-            for (String et : request.getParameterValues("et")) {
-                if(et.equals(eventType.getName())){
-                    eventsToAdd.add(eventType);
+            HashSet<EventType> eventsToAdd = new HashSet<>();
+            //get all ET compare name of selected and add to set;
+            for (EventType eventType : eventTypeService.listEventTypes()) {
+                for (String et : request.getParameterValues("et")) {
+                    if (et.equals(eventType.getName())) {
+                        eventsToAdd.add(eventType);
+                    }
                 }
             }
-        }
-        event.setEventTypes(eventsToAdd);
-        eventService.addEvent(event);
-        logger.debug("Event " + event + "added.");
+            event.setEventTypes(eventsToAdd);
+            event.setStartDate(new Date());
+            //event.setStartDate(DateParser.parse(request.getParameter("startDate")));
+            eventService.addEvent(event);
+            logger.debug("Event " + event + "added.");
 
-        userFilesManager.uploadImage(event,user.getUsername(),file.getInputStream());
-
+            response.setHeader("success","dsaasddsa");
+            userFilesManager.uploadImage(event, user.getUsername(), file.getInputStream());
         return "redirect:/";
     }
 

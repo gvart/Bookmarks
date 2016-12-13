@@ -43,14 +43,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-    @Bean
-    public MessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("/messages/messages");
-        return messageSource;
-    }
-
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resource/**").addResourceLocations("/resources/");
@@ -74,15 +66,23 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 
     @Bean
-    public LocaleResolver localeResolver() {
-        return new SessionLocaleResolver();
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("/messages/messages");
+        return messageSource;
     }
+
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");
         return localeChangeInterceptor;
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        return new SessionLocaleResolver();
     }
 
     @Bean
