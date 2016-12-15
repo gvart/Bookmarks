@@ -11,6 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>test</h1>
+    <h1>${errorMsg}</h1>
 </body>
 </html>

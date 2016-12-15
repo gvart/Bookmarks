@@ -16,14 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
@@ -91,6 +89,12 @@ public class EventController {
             response.setHeader("success","dsaasddsa");
             userFilesManager.uploadImage(event, user.getUsername(), file.getInputStream());
         return "redirect:/";
+    }
+
+    @RequestMapping("/event/{eventName}")
+    public String eventPage(@PathVariable("eventName") String eventName){
+        logger.debug("Visit event " + eventName + " page ");
+        return "event/eventMainPage";
     }
 
 

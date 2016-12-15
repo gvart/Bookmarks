@@ -8,6 +8,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.*;
+import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
 
 
@@ -40,7 +41,9 @@ public class SpringMVCInitializer extends AbstractAnnotationConfigDispatcherServ
 
     @Override
     protected Filter[] getServletFilters() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter("UTF-8", true);
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding(StandardCharsets.UTF_8.name());
+        characterEncodingFilter.setForceEncoding(true);
 
         // Dandelion filter definition and mapping -->
         DandelionFilter dandelionFilter = new DandelionFilter();
